@@ -367,10 +367,43 @@ var S = {
   matches:[], loading:false, loaded:false, errors:[], updated:null, addMsg:"",
   fcat:"", fdiv:"", collapsed:{}, editing:"", openVenue:{}, catOrder:[], divOrder:{}, hidePast:true, homeZone:"", homeFav:false, homeSort:"time", homeMax:0, homeCat:"", homeDiv:"", home:{lat:41.4207,lng:2.1900,label:"C/ Gran de la Sagrera, 48"}
 };
-function save(){try{localStorage.setItem(LSK,JSON.stringify({groups:S.groups,fav:S.fav,defRange:S.defRange,favOnlyDef:S.favOnlyDef,collapsed:S.collapsed,catOrder:S.catOrder,divOrder:S.divOrder,v:2,homeCat:S.homeCat,homeDiv:S.homeDiv,homeZone:S.homeZone,homeFav:S.homeFav,homeSort:S.homeSort,homeMax:S.homeMax,home:S.home}));}catch(e){}}
-function restore(){
+var VERSION="v11 · 3 oct";
+function payload(){return {ts:S.ts||0,groups:S.groups,fav:S.fav,defRange:S.defRange,favOnlyDef:S.favOnlyDef,collapsed:S.collapsed,catOrder:S.catOrder,divOrder:S.divOrder,v:2,homeCat:S.homeCat,homeDiv:S.homeDiv,homeZone:S.homeZone,homeFav:S.homeFav,homeSort:S.homeSort,homeMax:S.homeMax,home:S.home};}
+var SYNC="https://vjydwzokefbmwxcwbukv.supabase.co/functions/v1/sync", SK="partitsFCF.sync";
+var syncCode=""; try{syncCode=localStorage.getItem(SK)||"";}catch(e){}
+var pushT=null;
+function save(){S.ts=Date.now();try{localStorage.setItem(LSK,JSON.stringify(payload()));}catch(e){} schedulePush();}
+function schedulePush(){ if(!syncCode) return; clearTimeout(pushT); pushT=setTimeout(push,1500); }
+function setSyncMsg(m){S.syncMsg=m; if(S.tab==="ajustos") render();}
+function push(){
+  if(!syncCode) return Promise.resolve();
+  return fetch(SYNC,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({c:syncCode,data:payload()})})
+    .then(function(r){return r.json();}).then(function(j){setSyncMsg(j.ok?"Sincronitzat a les "+new Date().toLocaleTimeString("ca-ES",{hour:"2-digit",minute:"2-digit"}):"Error en desar: "+(j.error||"desconegut"));})
+    .catch(function(){setSyncMsg("Sense connexió: es desarà més endavant.");});
+}
+function applyRemote(d){
+  S.groups=[{id:"58454277",name:""}];S.fav={};S.collapsed={};S.catOrder=[];S.divOrder={};
+  restore(d); S.ts=d.ts||Date.now();
+  try{localStorage.setItem(LSK,JSON.stringify(payload()));}catch(e){}
+  S.matches=[]; S.loaded=false; render(); loadAll();
+}
+// force=true: el remot guanya sempre (en connectar un aparell nou)
+function pull(force){
+  if(!syncCode) return Promise.resolve();
+  return fetch(SYNC+"?c="+encodeURIComponent(syncCode)).then(function(r){return r.json();}).then(function(j){
+    if(j.data&&(force||(j.data.ts||0)>(S.ts||0))){applyRemote(j.data);setSyncMsg("Configuració actualitzada des del núvol.");}
+    else if(!j.data||(S.ts||0)>(j.data.ts||0)){return push();}
+    else setSyncMsg("Tot al dia.");
+  }).catch(function(){setSyncMsg("No he pogut connectar amb el núvol.");});
+}
+function connect(code,isNew){
+  syncCode=code; try{localStorage.setItem(SK,code);}catch(e){}
+  return isNew?(S.ts=S.ts||Date.now(),push()):pull(true);
+}
+function newCode(){var a=new Uint8Array(18);crypto.getRandomValues(a);var b="";for(var i=0;i<a.length;i++)b+=String.fromCharCode(a[i]);return btoa(b).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
+function restore(obj){
   try{
-    var j=JSON.parse(localStorage.getItem(LSK)||"null");
+    var j=obj||JSON.parse(localStorage.getItem(LSK)||"null");
     if(j){
       if(Array.isArray(j.groups)&&j.groups.length) S.groups=j.groups;
       if(j.fav&&typeof j.fav==="object") S.fav=j.fav;
@@ -379,6 +412,7 @@ function restore(){
       if(j.collapsed&&typeof j.collapsed==="object") S.collapsed=j.collapsed;
       if(typeof j.homeZone==="string") S.homeZone=j.homeZone;
       S.homeFav=!!j.homeFav;
+      S.ts=+j.ts||S.ts||0;
       if(typeof j.homeCat==="string") S.homeCat=j.homeCat;
       if(typeof j.homeDiv==="string") S.homeDiv=j.homeDiv;
       if(j.homeSort) S.homeSort=j.homeSort;
@@ -916,8 +950,21 @@ function viewAjustos(){
     +'<label class="switch"><input type="checkbox" id="favdef"'+(S.favOnlyDef?" checked":"")+' aria-label="Només els meus pavellons en obrir"><span></span></label></div></div>'
     +'<div class="box"><b>Punt de referència</b><p class="msg">Les distàncies es calculen des d\'aquí: <b>'+esc(S.home.label)+'</b> (aproximat). Els minuts a peu són una estimació.</p>'
     +'<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="pill line" data-act="geo">Fes servir la meva ubicació</button><button class="pill line" data-act="homedef">Torna a C/ Gran de la Sagrera, 48</button></div>'+(S.geoMsg?'<div class="msg">'+esc(S.geoMsg)+'</div>':'')+'</div>'
+    +'<div class="box"><b>Sincronització entre dispositius</b>'+(syncCode
+      ?'<p class="msg">Activada. Els canvis es desen sols al núvol i s\'actualitzen a tots els dispositius on hagis posat aquest codi.</p>'
+        +'<label class="f" for="synccode">El teu codi (tracta\'l com una contrasenya)</label><input id="synccode" readonly value="'+esc(syncCode)+'">'
+        +'<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="pill" data-act="synclink">Copia l\'enllaç per al mòbil</button><button class="pill line" data-act="syncnow">Sincronitza ara</button><button class="pill line" data-act="syncoff">Desconnecta</button></div>'
+      :'<p class="msg">Perquè el mòbil i l\'ordinador comparteixin grups, classificació i preferits.</p>'
+        +'<div><button class="pill" data-act="syncnew">Activa-la en aquest dispositiu</button></div>'
+        +'<div class="row"><div><label class="f" for="syncin">O enganxa un codi que ja tinguis</label><input id="syncin" placeholder="Codi de sincronització"></div></div>'
+        +'<div><button class="pill line" data-act="syncjoin">Connecta amb aquest codi</button></div>')
+      +(S.syncMsg?'<div class="msg">'+esc(S.syncMsg)+'</div>':'')+'</div>'
+    +'<div class="box"><b>Còpia manual (alternativa)</b><p class="msg">Els grups, la classificació (categoria i divisió), els pavellons preferits i els filtres es desen només en aquest dispositiu. Copia l\'enllaç i obre\'l al mòbil (o a l\'ordinador) per portar-ho tot.</p>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="pill" data-act="copycfg">Copia l\'enllaç de configuració</button></div>'
+    +(S.cfgLink?'<textarea id="cfglink" readonly rows="3">'+esc(S.cfgLink)+'</textarea>':'')+(S.cfgMsg?'<div class="msg">'+esc(S.cfgMsg)+'</div>':'')+'</div>'
     +'<div class="box"><b>Dades desades</b><p class="msg">Grups, pavellons preferits i ajustos viuen en aquest navegador. Si canvies de mòbil o de navegador, hauràs de tornar-los a marcar.</p>'
-    +'<div><button class="pill danger" data-act="wipe">Esborra les dades desades</button></div></div>';
+    +'<div><button class="pill danger" data-act="wipe">Esborra les dades desades</button></div></div>'
+    +'<p class="msg" style="text-align:center">Versió de l\'app: '+VERSION+'</p>';
   return shell(top,b);
 }
 
@@ -961,6 +1008,20 @@ document.addEventListener("click",function(e){
   }
   else if(a==="venfav"){S.venFav=!S.venFav;render();}
   else if(a==="vensort"){S.venSort=(S.venSort==="dist")?"next":"dist";render();}
+  else if(a==="copycfg"){
+    var link=location.href.split("#")[0]+"#cfg="+btoa(unescape(encodeURIComponent(JSON.stringify(payload()))));
+    S.cfgLink=link; S.cfgMsg="";
+    var done=function(ok){S.cfgMsg=ok?"Enllaç copiat. Envia-te'l (WhatsApp, correu…) i obre'l a l'altre dispositiu.":"Copia l'enllaç del quadre de sota.";render();};
+    try{navigator.clipboard.writeText(link).then(function(){done(true);},function(){done(false);});}catch(x){done(false);}
+  }
+  else if(a==="syncnew"){connect(newCode(),true).then(function(){render();});S.syncMsg="Creant el codi…";render();}
+  else if(a==="syncjoin"){var cv=($("syncin").value||"").trim();if(cv.length<20){S.syncMsg="El codi no és vàlid.";render();return;}if(confirm("Aquest dispositiu agafarà la configuració guardada al núvol amb aquest codi. Continuar?")){S.syncMsg="Connectant…";connect(cv,false).then(function(){render();});render();}}
+  else if(a==="syncnow"){S.syncMsg="Sincronitzant…";render();pull(false);}
+  else if(a==="syncoff"){if(confirm("Desconnectar aquest dispositiu? Les dades es queden aquí, però deixaran de sincronitzar-se.")){syncCode="";try{localStorage.removeItem(SK);}catch(x){}S.syncMsg="";render();}}
+  else if(a==="synclink"){
+    var sl=location.href.split("#")[0]+"#sync="+syncCode;
+    try{navigator.clipboard.writeText(sl).then(function(){setSyncMsg("Enllaç copiat. Envia-te'l i obre'l al mòbil.");},function(){setSyncMsg(sl);});}catch(x){setSyncMsg(sl);}
+  }
   else if(a==="hfav"){S.homeFav=!S.homeFav;save();render();}
   else if(a==="hidepast"){S.hidePast=!S.hidePast;render();}
   else if(a==="favonly"){S.favOnly=!S.favOnly;render();}
@@ -1013,9 +1074,30 @@ document.addEventListener("input",function(e){ if(e.target.id==="q"){S.q=e.targe
 
 // ---------- arranque ----------
 restore();
+(function(){
+  var h=location.hash||"";
+  if(h.indexOf("#sync=")===0){
+    var c=decodeURIComponent(h.slice(6));
+    if(c.length>=20&&confirm("Vols connectar aquest dispositiu a la sincronització? Agafarà la configuració guardada al núvol.")){connect(c,false);}
+    try{history.replaceState(null,"",location.pathname+location.search);}catch(e){}
+  }
+  if(h.indexOf("#cfg=")===0){
+    try{
+      var j=JSON.parse(decodeURIComponent(escape(atob(h.slice(5)))));
+      if(j&&Array.isArray(j.groups)&&confirm("Vols importar la configuració d'aquest enllaç (grups, classificació, pavellons preferits)? Substituirà la d'aquest dispositiu.")){
+        try{localStorage.setItem(LSK,JSON.stringify(j));}catch(e){}
+        S.groups=[{id:"58454277",name:""}];S.fav={};S.collapsed={};S.catOrder=[];S.divOrder={};
+        restore(j);save();
+      }
+    }catch(e){}
+    try{history.replaceState(null,"",location.pathname+location.search);}catch(e){}
+  }
+})();
 render();
 setInterval(function(){var a=document.activeElement;if(S.tab==="inici"&&!(a&&/INPUT|SELECT|TEXTAREA/.test(a.tagName))) render();},60000);
 loadAll();
+pull(false);
+document.addEventListener("visibilitychange",function(){if(!document.hidden) pull(false);});
 })();
 </script>
 </body>
