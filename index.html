@@ -61,6 +61,7 @@ main{display:block}
 
 /* botones */
 .pill{border:0;border-radius:999px;background:var(--accent);color:var(--on-accent);font-weight:700;padding:11px 20px;display:inline-flex;gap:8px;align-items:center;justify-content:center}
+.pill.ghost{background:rgba(255,255,255,.12);color:inherit;font-weight:600;font-size:.85rem;padding:8px 14px}
 .pill.dark{background:var(--ink);color:var(--on-ink)}
 .pill.line{background:transparent;border:1px solid var(--line);color:var(--fg)}
 .pill.danger{background:transparent;border:1px solid var(--warn);color:var(--warn)}
@@ -415,15 +416,16 @@ nav.tabs button{font-size:.66rem}
 
 /* escuts, colors, mapa, filtres inici */
 .crest{position:relative;overflow:hidden}
-.crest img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;padding:3px;border-radius:50%}
-.crest.ok{box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.crest img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:none;padding:0;border-radius:0;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
+.crest.ok{background:transparent;box-shadow:none;overflow:visible;border-radius:0}
 .crest.ok b{visibility:hidden}
-.hero .crest img{background:#fff}
+
 .mv.dotb{width:32px}
 .mv.dotb i{width:18px;height:18px;border-radius:50%;display:block;box-shadow:inset 0 0 0 2px rgba(255,255,255,.55)}
 .pal{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;background:var(--card);border-radius:14px;margin:8px 0 2px}
 .sw{width:30px;height:30px;border-radius:50%;border:2px solid transparent;padding:0}
 .sw.on{border-color:var(--fg);box-shadow:0 0 0 2px var(--sheet) inset}
+.hs{flex:1 0 100%;display:flex;flex-direction:column;gap:6px;margin-top:4px}.hs label{font-size:.78rem;font-weight:700;color:var(--muted,#666)}input.hue{-webkit-appearance:none;appearance:none;height:26px;border-radius:999px;background:linear-gradient(90deg,hsl(0 65% 50%),hsl(60 65% 50%),hsl(120 65% 50%),hsl(180 65% 50%),hsl(240 65% 50%),hsl(300 65% 50%),hsl(360 65% 50%));padding:0;border:0}input.hue::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:#fff;border:3px solid #1c1f26;box-shadow:0 1px 4px rgba(0,0,0,.4)}input.hue::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid #1c1f26}
 .sw.auto{width:auto;border-radius:999px;padding:0 12px;background:var(--sheet);border:1px solid var(--line);font-size:.8rem;font-weight:700}
 .distrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .distrow .lbl{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--muted);font-size:.86rem}
@@ -466,7 +468,7 @@ var S = {
   matches:[], loading:false, loaded:false, errors:[], updated:null, addMsg:"",
   fcat:"", fdiv:"", collapsed:{}, editing:"", openVenue:{}, catOrder:[], divOrder:{}, hidePast:true, homeZone:"", homeFav:false, homeSort:"time", homeMax:0, homeCat:"", homeDiv:"", watch:{}, teams:{}, eqGroup:"", crestsOn:true, catColor:{}, colorEdit:"", pview:"list", notif:{on:false,lead:30,watch:true,teams:true,venues:false}, home:{lat:41.4207,lng:2.1900,label:"C/ Gran de la Sagrera, 48"}
 };
-var VERSION="v18 · 3 oct";
+var VERSION="v20 · 3 oct";
 function payload(){return {crestsOn:S.crestsOn,catColor:S.catColor,watch:S.watch,teams:S.teams,notif:S.notif,ts:S.ts||0,groups:S.groups,fav:S.fav,defRange:S.defRange,favOnlyDef:S.favOnlyDef,collapsed:S.collapsed,catOrder:S.catOrder,divOrder:S.divOrder,v:2,homeCat:S.homeCat,homeDiv:S.homeDiv,homeZone:S.homeZone,homeFav:S.homeFav,homeSort:S.homeSort,homeMax:S.homeMax,home:S.home};}
 var SYNC="https://vjydwzokefbmwxcwbukv.supabase.co/functions/v1/sync", SK="partitsFCF.sync";
 var syncCode=""; try{syncCode=localStorage.getItem(SK)||"";}catch(e){}
@@ -683,8 +685,7 @@ function filtered(){
     if(S.day!=="all"&&m.date!==S.day) return false;
     if(S.favOnly&&!S.fav[m.camp]) return false;
     if(m.time&&(m.time<S.tmin||m.time>S.tmax)) return false;
-    if(S.zone&&m.zone!==S.zone) return false;
-    if(q&&(m.home+" "+m.away+" "+m.camp+" "+m.cat+" "+(g.name||"")+" "+(g.cat||"")+" "+(g.div||"")).toLowerCase().indexOf(q)<0) return false;
+        if(q&&(m.home+" "+m.away+" "+m.camp+" "+m.cat+" "+(g.name||"")+" "+(g.cat||"")+" "+(g.div||"")).toLowerCase().indexOf(q)<0) return false;
     return true;
   }).sort(function(a,b){
     return a.date.localeCompare(b.date)||(a.time||"99").localeCompare(b.time||"99")||a.camp.localeCompare(b.camp);
@@ -962,7 +963,7 @@ function viewInici(){
   var zs={}; inDays.forEach(function(m){if(m.zone&&m.zone!==NOLOC)zs[m.zone]=1;});
   var cs={},ds={}; inDays.forEach(function(m){var g=GM[m.gid]||{};cs[g.cat||NOCAT]=1;ds[g.div||NODIV]=1;});
   var favN=inDays.filter(function(m){return S.fav[m.camp];}).length;
-  var rows=inDays.filter(function(m){return (!S.homeZone||m.zone===S.homeZone)&&(!S.homeFav||S.fav[m.camp]);})
+  var rows=inDays.filter(function(m){return (!S.homeFav||S.fav[m.camp]);})
     .filter(function(m){var g=GM[m.gid]||{};return (!S.homeCat||(g.cat||NOCAT)===S.homeCat)&&(!S.homeDiv||(g.div||NODIV)===S.homeDiv);})
     .filter(function(m){if(!S.homeMax) return true;var d=homeDist(m);return d!=null&&d<=S.homeMax;});
   var byDist=S.homeSort==="dist";
@@ -972,7 +973,7 @@ function viewInici(){
   var title=!first?"Cap partit pròxim":(first===today?"Avui":(days.length>1||fromIso(first).getDay()===6||fromIso(first).getDay()===0?"Cap de setmana":dlong(first)));
   var sub=!first?"No he trobat partits futurs":(first===today?dlong(today):dlong(first)+(days.length>1?" – "+dlong(days[days.length-1]):""));
   var top='<span class="eyebrow">Què puc anar a veure?</span><h1>'+esc(title)+'</h1><span class="subline">'+esc(sub)+(first?' · '+inDays.length+' partits'+(favN?' · '+favN+' als teus pavellons':''):'')+'</span>'
-    +'<div class="actions"><button class="pill" data-act="reload"'+(S.loading?" disabled":"")+'>'+ic("refresh",S.loading?"spin":"")+(S.loading?"Actualitzant":"Actualitza")+'</button></div>';
+    +'<div class="actions"><button class="pill ghost" data-act="reload" title="Toca per actualitzar ara"'+(S.loading?" disabled":"")+'>'+ic("refresh",S.loading?"spin":"")+(S.loading?"Actualitzant…":(S.updated?"Actualitzat a les "+p2(S.updated.getHours())+":"+p2(S.updated.getMinutes()):"Actualitza"))+'</button></div>';
   var b="";
   if(S.errors.length) b+='<div class="msg err">No s\'ha pogut llegir:\n'+esc(S.errors.join("\n"))+'</div>';
   b+=programHTML();
@@ -983,9 +984,8 @@ function viewInici(){
   var mopt=function(v,t){return '<option value="'+v+'"'+(S.homeMax===v?" selected":"")+'>'+t+'</option>';};
   var dchip=function(v,t){return '<button class="chip" data-hmaxset="'+v+'" aria-pressed="'+(S.homeMax===v)+'">'+t+'</button>';};
   b+='<div class="distrow"><span class="lbl">'+ic("walk")+' Fins a</span>'+dchip(0,"Qualsevol")+dchip(1,"1 km")+dchip(2,"2 km")+dchip(3,"3 km")+dchip(5,"5 km")+'</div>';
-  var moreOn=!!(S.homeZone||S.homeCat||S.homeDiv||S.homeFav);
-  b+='<details class="box"'+(moreOn?" open":"")+'><summary>Més filtres'+(moreOn?' · actius':'')+' '+ic("chev","chev")+'</summary><div class="hfilters"><div><label class="f" for="hzone">Barri / zona</label><select id="hzone">'+zopts+'</select></div>'
-    +'<div><label class="f" for="hcat">Categoria</label><select id="hcat">'+oo(cs,S.homeCat,"Totes")+'</select></div>'
+  var moreOn=!!(S.homeCat||S.homeDiv||S.homeFav);
+  b+='<details class="box"'+(moreOn?" open":"")+'><summary>Més filtres'+(moreOn?' · actius':'')+' '+ic("chev","chev")+'</summary><div class="hfilters"><div><label class="f" for="hcat">Categoria</label><select id="hcat">'+oo(cs,S.homeCat,"Totes")+'</select></div>'
     +'<div><label class="f" for="hdiv">Divisió</label><select id="hdiv">'+oo(ds,S.homeDiv,"Totes")+'</select></div>'
     +'<button class="chip" data-act="hfav" aria-pressed="'+S.homeFav+'">'+ic("star",S.homeFav?"fill":"")+' Només els meus pavellons</button></div></details>';
   if(!rows.length){
@@ -996,7 +996,7 @@ function viewInici(){
   var h=rows[0], st=startOf(h), mins=Math.round((st-now)/60000), live=mins<=0;
   var big=live?"S'està jugant":(h.date===today?(mins<60?"Comença en "+mins+" min":"Comença en "+durTxt(mins)):dlong(h.date));
   var small=live?((h.score?"Marcador "+h.score+" · ":"")+"va començar fa "+(-mins)+" min"):(h.date===today?("a les "+h.time):("a les "+h.time));
-  var hz=(h.zone&&h.zone!==NOLOC)?h.zone:"";
+  var hz="";
   b+='<div class="hero'+(live?" live":"")+'" style="--h:'+catHue((GM[h.gid]||{}).cat,(GM[h.gid]||{}).name||(GM[h.gid]||{}).orig||h.cat)+'"><div class="hero-t"><span class="hl">'+(live?'<i class="dot"></i>':'')+(live?"Ara":(byDist?"El més a prop de casa":"El pròxim partit"))+'</span><b>'+esc(big)+'</b><em>'+esc(small)+'</em>'+(function(){var g=GM[h.gid]||{};var t=[g.cat,g.div,g.grp?"Grup "+g.grp:""].filter(Boolean);return t.length?'<span class="mtags hero-tags">'+t.map(function(x){return '<span class="cc">'+esc(x)+'</span>';}).join("")+'</span>':'<span class="mtags hero-tags"><span class="cc">'+esc(g.name||g.orig||h.cat)+'</span><button class="cc add" data-classify="'+esc(h.gid)+'">+ Categoria i divisió</button></span>';})()+'</div>'
     +'<div class="hero-m"><div class="tm">'+crest(h.home)+'<span class="tn">'+esc(h.home)+'</span></div><div class="tm">'+crest(h.away)+'<span class="tn">'+esc(h.away)+'</span></div></div>'
     +'<div class="hero-v"><span class="name">'+ic("pin")+'<span>'+esc(h.camp)+(hz?' · '+esc(hz):'')+(distTxt(h)?' · '+esc(distTxt(h)):'')+'</span></span><span class="acts">'+mapLink(h)+heartBtn(h)+starBtn(h.camp,!!S.fav[h.camp])+'</span></div></div>';
@@ -1087,7 +1087,7 @@ function matchCard(m,mode){
   var tagsH=(g.cat||g.div)?((g.cat?'<span class="cc">'+esc(g.cat)+'</span>':'')+(g.div?'<span class="cc dv">'+esc(g.div)+'</span>':'')+(g.grp?'<span class="cc dv">G'+esc(g.grp)+'</span>':'')):'<span class="cc">'+esc(label)+'</span><button class="cc add" data-classify="'+esc(m.gid)+'">+ Categoria i divisió</button>';
   var sc=m.score?m.score.split(" - "):["",""];
   var hue=catHue(g.cat,g.name||g.orig||m.cat);
-  var zn=(m.zone&&m.zone!==NOLOC)?'<span class="zn">'+esc(m.zone)+'</span>':"";
+  var zn="";
   var dt=distTxt(m); if(dt) zn='<span class="zn dist">'+ic("walk")+esc(dt)+'</span>'+zn;
   return '<article class="match'+(fav?" fav":"")+((S.teams[m.home]||S.teams[m.away])?" mine":"")+(S.watch[mkey(m)]?" watch":"")+'" style="--h:'+hue+'">'
     +'<div class="mh"><span class="when"><b>'+esc(m.time||"--:--")+'</b>'+dayBadge(m,mode)+'</span><span class="grow"></span><span class="mtags">'+tagsH+'</span></div>'
@@ -1170,11 +1170,10 @@ function viewPartits(){
   var copts='<option value="">Totes</option>'+Object.keys(cs).sort().map(function(z){return '<option value="'+esc(z)+'"'+(z===S.fcat?" selected":"")+'>'+esc(z)+'</option>';}).join("");
   var dopts='<option value="">Totes</option>'+Object.keys(ds).sort().map(function(z){return '<option value="'+esc(z)+'"'+(z===S.fdiv?" selected":"")+'>'+esc(z)+'</option>';}).join("");
   var wide=false; try{wide=window.matchMedia("(min-width:900px)").matches;}catch(e){}
-  b+='<details class="box"'+((wide||S.fcat||S.fdiv||S.zone||S.q||S.tmin!=="00:00"||S.tmax!=="23:59")?" open":"")+'><summary>Més filtres '+ic("chev","chev")+'</summary>'
+  b+='<details class="box"'+((wide||S.fcat||S.fdiv||S.q||S.tmin!=="00:00"||S.tmax!=="23:59")?" open":"")+'><summary>Més filtres '+ic("chev","chev")+'</summary>'
     +'<div class="row"><div><label class="f" for="fcat">Categoria</label><select id="fcat">'+copts+'</select></div><div><label class="f" for="fdiv">Divisió</label><select id="fdiv">'+dopts+'</select></div></div>'
     +'<div class="row"><div><label class="f" for="tmin">Des de</label><input id="tmin" type="time" value="'+esc(S.tmin)+'"></div><div><label class="f" for="tmax">Fins a</label><input id="tmax" type="time" value="'+esc(S.tmax)+'"></div></div>'
-    +'<div class="row"><div><label class="f" for="zone">Zona de Barcelona</label><select id="zone">'+zopts+'</select></div><div><label class="f" for="q">Cerca</label><input id="q" type="search" placeholder="Equip, pavelló, categoria" value="'+esc(S.q)+'"></div></div>'
-    +'<p class="msg">La zona és aproximada, calculada amb les coordenades del pavelló.</p></details>';
+    +'<div class="row"><div style="grid-column:1/-1"><label class="f" for="q">Cerca</label><input id="q" type="search" placeholder="Equip, pavelló, categoria" value="'+esc(S.q)+'"></div></div></details>';
   b+='<div class="seg" role="group" aria-label="Agrupació">'
     +[["time","Per hora"],["venue","Per pavelló"],["cat","Per categoria"]].map(function(x){return '<button data-view="'+x[0]+'" aria-pressed="'+(S.view===x[0])+'">'+x[1]+'</button>';}).join("")+'</div>';
   b+='</aside><div class="results"><div class="seg pv" role="group" aria-label="Vista"><button data-pview="list" aria-pressed="'+(S.pview!=="map")+'">'+ic("list")+' Llista</button><button data-pview="map" aria-pressed="'+(S.pview==="map")+'">'+ic("pin")+' Mapa</button></div><div id="list"></div></div></div>';
@@ -1222,7 +1221,7 @@ function viewPavellons(){
     var dt=o.lat!=null?distTxt({lat:o.lat,lng:o.lng}):"";
     var live=o.inRange.some(function(m){return m.date===iso(new Date())&&m.time&&startOf(m)<=new Date();});
     b+='<article class="vcard'+(on?" fav":"")+'"><header class="vh"><div class="vt1"><h3>'+esc(o.camp)+'</h3>'
-      +'<div class="vmeta">'+(o.zone&&o.zone!==NOLOC?'<span>'+esc(o.zone)+'</span>':'')+(dt?'<span class="dist">'+ic("walk")+esc(dt)+'</span>':'')+'</div></div>'
+      +'<div class="vmeta">'+(dt?'<span class="dist">'+ic("walk")+esc(dt)+'</span>':'')+'</div></div>'
       +'<div class="vact">'+(o.lat!=null?'<a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+o.lat+','+o.lng+'">Mapa</a>':'')+starBtn(o.camp,on)+'</div></header>'
       +'<div class="vsum"><b>'+n+'</b> '+(n===1?"partit":"partits")+(live?' · <span class="livetag"><i class="dot"></i>en joc ara</span>':'')+'</div>'
       +(n?'<div class="vms">'+shown.map(function(m){return venueMatchRow(m,gm);}).join("")+'</div>':'<div class="vnone">Cap partit en aquest interval.</div>')
@@ -1261,9 +1260,9 @@ function ordSort(arr,order,none){
 }
 function orderedCats(){var seen={},c=[];S.groups.forEach(function(g){var k=g.cat||NOCAT;if(!seen[k]){seen[k]=1;c.push(k);}});return ordSort(c,S.catOrder,NOCAT);}
 function orderedDivs(cat){var seen={},d=[];S.groups.forEach(function(g){if((g.cat||NOCAT)!==cat)return;var k=g.div||NODIV;if(!seen[k]){seen[k]=1;d.push(k);}});return ordSort(d,S.divOrder[cat]||[],NODIV);}
-var HUES=[0,18,40,75,140,165,190,215,245,275,305,335];
+var HUES=[0,10,22,34,46,58,75,100,130,150,165,178,190,202,215,230,245,262,278,292,305,320,335,350];
 function palette(c){
-  return '<div class="pal" role="group" aria-label="Triar color per a '+esc(c)+'">'+HUES.map(function(h){return '<button class="sw'+(S.catColor[c]===h?" on":"")+'" data-setcolor="'+h+'" style="background:hsl('+h+' 65% 50%)" aria-label="Color '+h+'"></button>';}).join("")+'<button class="sw auto" data-setcolor="auto">Auto</button></div>';
+  return '<div class="pal" role="group" aria-label="Triar color per a '+esc(c)+'">'+HUES.map(function(h){return '<button class="sw'+(S.catColor[c]===h?" on":"")+'" data-setcolor="'+h+'" style="background:hsl('+h+' 65% 50%)" aria-label="Color '+h+'"></button>';}).join("")+'<button class="sw auto" data-setcolor="auto">Auto</button><div class="hs"><label for="hueS">Qualsevol color</label><input id="hueS" class="hue" type="range" min="0" max="359" value="'+(S.catColor[c]!=null?S.catColor[c]:hueOf(c))+'" aria-label="To del color"></div></div>';
 }
 function mvBtns(kind,key,i,n,what){
   return '<span class="mvs"><button class="mv" data-mv="'+esc(kind+"¦"+key+"¦-1")+'" aria-label="Mou amunt '+esc(what)+'"'+(i===0?" disabled":"")+'>▲</button><button class="mv" data-mv="'+esc(kind+"¦"+key+"¦1")+'" aria-label="Mou avall '+esc(what)+'"'+(i===n-1?" disabled":"")+'>▼</button></span>';
@@ -1452,8 +1451,8 @@ document.addEventListener("change",function(e){
   if(t.id==="nteams"){S.notif.teams=t.checked;save();return;}
   if(t.id==="nvenues"){S.notif.venues=t.checked;save();return;}
   if(t.id==="hmax"){S.homeMax=+t.value||0;save();render();return;}
-  if(t.id==="hzone"){S.homeZone=t.value;save();render();return;}
-  if(t.id==="zone"){S.zone=t.value;renderList();}
+  if(t.id==="hueS"){if(S.colorEdit){S.catColor[S.colorEdit]=+t.value;save();}render();return;}
+  if(false){}
   else if(t.id==="fcat"){S.fcat=t.value;renderList();}
   else if(t.id==="fdiv"){S.fdiv=t.value;renderList();}
   else if(t.id==="tmin"){S.tmin=t.value||"00:00";renderList();}
@@ -1495,6 +1494,7 @@ function liveNeeded(){
   });
 }
 setInterval(function(){ if(!document.hidden&&!S.loading&&liveNeeded()) loadAll(true); },90000);
+setInterval(function(){ if(!document.hidden&&!S.loading&&S.groups.length) loadAll(true); },300000);
 setInterval(function(){var a=document.activeElement;if(S.tab==="inici"&&!(a&&/INPUT|SELECT|TEXTAREA/.test(a.tagName))) render();},60000);
 loadAll();
 pull(false);
