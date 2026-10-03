@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1c1f26">
+<title>Partits FCF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap">
+<style>
+/* Diseño: cabecera oscura + hoja blanca con esquinas redondeadas, rojo FCF más oscuro como acento.
+   Móvil: barra inferior. Escritorio (>=900px): menú lateral y tarjetas en rejilla. */
+:root{
+  --bg:#e9ebea; --sheet:#ffffff; --card:#f1f3f2; --ink:#1c1f26; --ink2:#2b303b;
+  --on-ink:#ffffff; --fg:#161a20; --muted:#6b727c; --line:#e0e4e2;
+  --accent:#c4161c; --accent-hi:#e5352f; --on-accent:#ffffff; --star:#f2b01e; --warn:#b4540a;
+  --display:"Barlow Condensed","Arial Narrow","Roboto Condensed",system-ui,sans-serif;
+  --shadow:0 10px 28px rgba(20,24,30,.10);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c0e12; --sheet:#171a20; --card:#20242c; --ink:#0a0c10; --ink2:#262b35;
+    --fg:#eceff3; --muted:#9aa2ad; --line:#2a2f38; --accent:#e0312b; --accent-hi:#f0584f;
+    --shadow:0 10px 28px rgba(0,0,0,.4); --warn:#f0a35e; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c0e12; --sheet:#171a20; --card:#20242c; --ink:#0a0c10; --ink2:#262b35;
+  --fg:#eceff3; --muted:#9aa2ad; --line:#2a2f38; --accent:#e0312b; --accent-hi:#f0584f;
+  --shadow:0 10px 28px rgba(0,0,0,.4); --warn:#f0a35e; color-scheme: dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px));overflow-x:hidden}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--accent-hi);outline-offset:2px}
+main{display:block}
+
+/* ---------- cabecera oscura ---------- */
+.top{background:var(--ink);color:var(--on-ink);padding:calc(env(safe-area-inset-top,0px) + 22px) 18px 52px;position:relative;overflow:hidden}
+.top::after{content:"";position:absolute;right:-46px;top:-46px;width:150px;height:150px;border-radius:50%;border:16px solid var(--accent);opacity:.95;pointer-events:none}
+.top-in{position:relative;max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:6px;z-index:1}
+.eyebrow{color:#aeb6c4;letter-spacing:.08em;text-transform:uppercase;font-size:.74rem;font-weight:700}
+.top h1{font-family:var(--display);font-weight:700;font-size:2.5rem;line-height:1;letter-spacing:.005em;max-width:80%}
+.top .subline{color:#aeb6c4;font-size:.9rem}
+.top .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+
+/* ---------- hoja blanca ---------- */
+.sheet{background:var(--sheet);border-radius:28px 28px 0 0;margin-top:-28px;position:relative;z-index:2;padding:20px 16px 28px;display:flex;flex-direction:column;gap:14px;min-height:60vh;max-width:1000px;margin-inline:auto;width:100%}
+
+/* botones */
+.pill{border:0;border-radius:999px;background:var(--accent);color:var(--on-accent);font-weight:700;padding:11px 20px;display:inline-flex;gap:8px;align-items:center;justify-content:center}
+.pill.dark{background:var(--ink);color:var(--on-ink)}
+.pill.line{background:transparent;border:1px solid var(--line);color:var(--fg)}
+.pill.danger{background:transparent;border:1px solid var(--warn);color:var(--warn)}
+.pill.onink{background:var(--accent);color:var(--on-accent)}
+.pill:disabled{opacity:.65}
+
+/* chips */
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;flex-wrap:nowrap}
+.chips::-webkit-scrollbar{display:none}
+@media (min-width:700px){.chips{flex-wrap:wrap;overflow:visible}}
+.chip{flex:0 0 auto;border:0;background:var(--card);border-radius:999px;padding:9px 15px;font-weight:600;font-size:.88rem}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+
+/* baldosas tipo "overview" */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{border:0;border-radius:20px;padding:16px;text-align:left;display:flex;flex-direction:column;gap:4px;min-height:112px;color:#fff;position:relative;overflow:hidden}
+.tile span{font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.85}
+.tile b{font-family:var(--display);font-weight:700;font-size:2.6rem;line-height:1;font-variant-numeric:tabular-nums}
+.tile em{font-style:normal;font-size:.82rem;opacity:.85;margin-top:auto}
+.tile.red{background:linear-gradient(145deg,var(--accent-hi),var(--accent) 70%)}
+.tile.dark{background:var(--ink2);box-shadow:inset 0 0 0 2px transparent}
+.tile.dark[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--star)}
+.tile.dark .star{position:absolute;right:14px;top:14px;color:var(--star)}
+
+/* días */
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:8px}
+.day{border:0;background:var(--card);border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.day span{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.day b{font-family:var(--display);font-size:1.6rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.day em{font-style:normal;font-size:.74rem;color:var(--muted)}
+.day[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+.day[aria-pressed="true"] span,.day[aria-pressed="true"] em{color:#aeb6c4}
+
+/* formularios */
+.box{background:var(--card);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+label.f{display:block;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+input,select,textarea{width:100%;font:inherit;color:var(--fg);background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+textarea{min-height:92px;resize:vertical;font-size:.85rem}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+details>summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details>summary::-webkit-details-marker{display:none}
+details[open]>summary .chev{transform:rotate(180deg)}
+.seg{display:flex;background:var(--card);border-radius:999px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;background:transparent;padding:9px 6px;font-weight:600;font-size:.85rem;border-radius:999px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+
+/* listado */
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr));gap:10px}
+.sec{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:8px}
+.sec:first-child{margin-top:0}
+.sec h2{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:.01em}
+.sec small{color:var(--muted)}
+.match{background:var(--card);border-radius:18px;padding:12px;display:grid;grid-template-columns:58px 1fr;gap:12px;border:2px solid transparent;min-width:0}
+.match.fav{border-color:var(--star)}
+.mt{background:var(--ink);color:var(--on-ink);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 2px}
+.mt b{font-family:var(--display);font-weight:700;font-size:1.35rem;line-height:1;font-variant-numeric:tabular-nums}
+.mt span{font-size:.68rem;color:#aeb6c4}
+.mb{display:flex;flex-direction:column;gap:6px;min-width:0}
+.teams{font-weight:700;overflow-wrap:anywhere}
+.teams i{font-style:normal;color:var(--muted);font-weight:500}
+.venue{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:.86rem;color:var(--muted)}
+.venue .name{overflow-wrap:anywhere;min-width:0}
+.venue .acts{display:flex;gap:2px;align-items:center;flex:0 0 auto}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{background:var(--sheet);border-radius:999px;padding:3px 10px;font-size:.76rem;font-weight:600}
+.tag.zone{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.tag.score{background:var(--accent);color:var(--on-accent)}
+.icon-btn{border:0;background:transparent;padding:6px;border-radius:10px;display:inline-flex;color:var(--muted)}
+.icon-btn.on{color:var(--star)}
+.map{color:var(--accent);font-weight:700;text-decoration:none;font-size:.82rem;white-space:nowrap;padding:6px 4px}
+:root[data-theme="dark"] .map{color:var(--accent-hi)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .map{color:var(--accent-hi)}}
+
+/* filas de pabellones y grupos */
+.rows{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:10px}
+.row-card{background:var(--card);border-radius:18px;padding:13px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.row-card .grow{flex:1;min-width:150px}
+.row-card b{display:block;overflow-wrap:anywhere}
+.row-card small{color:var(--muted)}
+.row-card.fav{background:var(--ink);color:var(--on-ink)}
+.row-card.fav small{color:#aeb6c4}
+.row-card.fav .map{color:var(--accent-hi)}
+.bar{flex:1 0 100%;height:6px;border-radius:999px;background:var(--line);overflow:hidden}
+.row-card.fav .bar{background:#3a404c}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:999px}
+.row-card.fav .bar i{background:var(--accent-hi)}
+.switch{position:relative;width:48px;height:28px;flex:0 0 auto}
+.switch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;width:100%;height:100%}
+.switch span{position:absolute;inset:0;border-radius:999px;background:#a2a9b4;transition:background .15s}
+.switch span::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .15s}
+.switch input:checked+span{background:var(--accent)}
+.switch input:checked+span::after{transform:translateX(20px)}
+.switch input:focus-visible+span{outline:2px solid var(--accent-hi);outline-offset:2px}
+.empty{text-align:center;color:var(--muted);padding:28px 12px;background:var(--card);border-radius:18px}
+.empty b{display:block;color:var(--fg);margin-bottom:4px}
+.msg{font-size:.86rem;color:var(--muted);overflow-wrap:anywhere;white-space:pre-wrap}
+.msg.err{color:var(--warn)}
+.link-del{color:var(--warn);border:0;background:transparent;font-weight:700;padding:6px 8px}
+
+/* ---------- navegación ---------- */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--sheet);border-top:1px solid var(--line);padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));z-index:5}
+nav.tabs .brand{display:none}
+nav.tabs .in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+nav.tabs button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border-radius:14px;color:var(--muted);font-size:.72rem;font-weight:700}
+nav.tabs button[aria-current="page"]{color:var(--fg)}
+nav.tabs button[aria-current="page"] svg{color:var(--accent)}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+svg.i.fill{fill:currentColor}
+.spin{animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.spin{animation:none}.switch span,.switch span::after{transition:none}}
+
+/* ---------- escritorio ---------- */
+@media (min-width:900px){
+  body{padding-bottom:0;padding-left:236px}
+  nav.tabs{top:0;right:auto;width:236px;border-top:0;border-right:1px solid var(--line);padding:28px 14px;display:flex;flex-direction:column;gap:18px}
+  nav.tabs .brand{display:block;font-family:var(--display);font-weight:700;font-size:1.7rem;letter-spacing:.01em;padding:0 10px}
+  nav.tabs .brand i{font-style:normal;color:var(--accent)}
+  nav.tabs .in{display:flex;flex-direction:column;gap:4px;max-width:none;margin:0;width:100%}
+  nav.tabs button{flex-direction:row;gap:12px;padding:12px 14px;font-size:.95rem;justify-content:flex-start;border-radius:14px}
+  nav.tabs button[aria-current="page"]{background:var(--card)}
+  .top{padding:34px 36px 64px}
+  .top h1{font-size:3.2rem}
+  .sheet{padding:26px 28px 40px;border-radius:28px;margin-top:-34px;margin-bottom:32px}
+  .tiles{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+}
+@media (min-width:1200px){ .sheet{margin-inline:auto} .top-in{max-width:1000px} }
+@media (max-width:380px){ .top h1{font-size:2.1rem} .tile b{font-size:2.2rem} }
+</style>
+</head>
+<body>
+<main id="view"></main>
+<nav class="tabs" aria-label="Seccions"><div class="brand">Partits <i>FCF</i></div><div class="in" id="tabs"></div></nav>
+
+<script>
+(function(){
+"use strict";
+var FN = "https://vjydwzokefbmwxcwbukv.supabase.co/functions/v1/partits?k=bLE7hrL7WrIbEzVCMrxbfdbe&grupId=";
+var LSK = "partitsFCF.v2";
+
+// ---------- estado ----------
+var S = {
+  tab:"partits", groups:[{id:"58454277",name:""}], fav:{},
+  defRange:"next", favOnlyDef:false,
+  range:"next", from:"", to:"", day:"all", favOnly:false, view:"time",
+  tmin:"00:00", tmax:"23:59", zone:"", q:"",
+  matches:[], loading:false, loaded:false, errors:[], updated:null, addMsg:""
+};
+function save(){try{localStorage.setItem(LSK,JSON.stringify({groups:S.groups,fav:S.fav,defRange:S.defRange,favOnlyDef:S.favOnlyDef}));}catch(e){}}
+function restore(){
+  try{
+    var j=JSON.parse(localStorage.getItem(LSK)||"null");
+    if(j){
+      if(Array.isArray(j.groups)&&j.groups.length) S.groups=j.groups;
+      if(j.fav&&typeof j.fav==="object") S.fav=j.fav;
+      if(j.defRange) S.defRange=j.defRange;
+      S.favOnlyDef=!!j.favOnlyDef;
+    }
+  }catch(e){}
+  S.range=S.defRange; S.favOnly=S.favOnlyDef;
+}
+
+// ---------- utilidades ----------
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function p2(n){return (n<10?"0":"")+n;}
+function iso(d){return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate());}
+function addDays(d,n){return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);}
+function fromIso(s){var m=s.split("-");return new Date(+m[0],+m[1]-1,+m[2]);}
+var DAYS=["diumenge","dilluns","dimarts","dimecres","dijous","divendres","dissabte"];
+var MONTHS=["gener","febrer","març","abril","maig","juny","juliol","agost","setembre","octubre","novembre","desembre"];
+function dname(s){return DAYS[fromIso(s).getDay()];}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+function de(m){return /^[aeiou]/.test(m)?"d'"+m:"de "+m;}
+function dlong(s){var d=fromIso(s);return cap(DAYS[d.getDay()])+" "+d.getDate()+" "+de(MONTHS[d.getMonth()]);}
+
+// Intervalos: hoy, este fin de semana y el siguiente que aún no ha empezado
+function rangeFor(kind,now){
+  var t=now||new Date(), dow=t.getDay(), sat;
+  if(kind==="today") return [iso(t),iso(t)];
+  if(kind==="this"){
+    sat = dow===0 ? addDays(t,-1) : addDays(t,6-dow);
+    return [iso(sat),iso(addDays(sat,1))];
+  }
+  if(kind==="custom") return [S.from||iso(t),S.to||S.from||iso(t)];
+  sat = addDays(t, dow===6 ? 7 : 6-dow);
+  return [iso(sat),iso(addDays(sat,1))];
+}
+function curRange(){return rangeFor(S.range);}
+function rangeLabel(r){
+  var a=fromIso(r[0]), b=fromIso(r[1]);
+  if(r[0]===r[1]) return cap(DAYS[a.getDay()])+" "+a.getDate()+" "+de(MONTHS[a.getMonth()]);
+  if(a.getMonth()===b.getMonth()) return a.getDate()+"–"+b.getDate()+" "+de(MONTHS[a.getMonth()]);
+  return a.getDate()+" "+MONTHS[a.getMonth()]+" – "+b.getDate()+" "+MONTHS[b.getMonth()];
+}
+function rangeTitle(){return {today:"Avui",this:"Aquest cap de setmana",next:"Cap de setmana vinent",custom:"Dates triades"}[S.range];}
+
+var ZONES=[
+  {n:"Ciutat Vella i Eixample",la:41.389,lo:2.165},
+  {n:"Sants-Montjuïc i Zona Franca",la:41.368,lo:2.142},
+  {n:"Les Corts, Sarrià i Sant Gervasi",la:41.398,lo:2.122},
+  {n:"Gràcia, Horta i Guinardó",la:41.418,lo:2.160},
+  {n:"Nou Barris",la:41.443,lo:2.176},
+  {n:"Sant Andreu",la:41.436,lo:2.192},
+  {n:"Sant Martí i Poblenou",la:41.408,lo:2.203}
+];
+var OUT="Fora de Barcelona", NOLOC="Sense ubicació";
+function distKm(a,b,c,d){var R=6371,r=Math.PI/180,dl=(c-a)*r,dg=(d-b)*r;var x=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a*r)*Math.cos(c*r)*Math.sin(dg/2)*Math.sin(dg/2);return 2*R*Math.asin(Math.sqrt(x));}
+function zoneOf(la,lo){
+  if(!isFinite(la)||!isFinite(lo)||(!la&&!lo)) return NOLOC;
+  if(distKm(la,lo,41.395,2.165)>9) return OUT;
+  var best=null,bd=1e9; ZONES.forEach(function(z){var d=distKm(la,lo,z.la,z.lo);if(d<bd){bd=d;best=z.n;}});
+  return best;
+}
+
+// ---------- lectura de datos de la FCF ----------
+function pick(o,names){
+  var keys=Object.keys(o);
+  for(var i=0;i<names.length;i++) for(var j=0;j<keys.length;j++)
+    if(keys[j].toLowerCase()===names[i]){var v=o[keys[j]];if(v!==null&&v!==undefined&&v!=="") return v;}
+  return "";
+}
+function parseDate(s){
+  s=String(s||""); var m=s.match(/(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})/);
+  if(m) return {d:m[1]+"-"+m[2]+"-"+m[3],t:m[4]+":"+m[5]};
+  m=s.match(/(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2})/);
+  if(m) return {d:m[3]+"-"+m[2]+"-"+m[1],t:m[4]+":"+m[5]};
+  m=s.match(/(\d{4})-(\d{2})-(\d{2})/); if(m) return {d:m[1]+"-"+m[2]+"-"+m[3],t:""};
+  return null;
+}
+function normalize(o){
+  var dt=parseDate(pick(o,["comienzo1","comienzo","fecha_hora","fecha","datetime","kickoff","data"]));
+  var la=parseFloat(String(pick(o,["latitud","latitude","lat"])).replace(",","."));
+  var lo=parseFloat(String(pick(o,["longitud","longitude","lng","lon"])).replace(",","."));
+  var gc=pick(o,["goles_casa","goals_home"]), gf=pick(o,["goles_fuera","goals_away"]);
+  return {
+    id:pick(o,["codacta","id"]),
+    cat:String(pick(o,["grupo","grup","group","competicion","competicio"])||"Sense categoria"),
+    jornada:pick(o,["jornada","matchday"]),
+    date:dt?dt.d:"", time:dt?dt.t:"",
+    home:String(pick(o,["nombre_casa","local","home_team"])||"?"),
+    away:String(pick(o,["nombre_fuera","visitant","visitante","away_team"])||"?"),
+    camp:String(pick(o,["campo","camp","venue"])||"Camp sense indicar"),
+    lat:isFinite(la)?la:null, lng:isFinite(lo)?lo:null,
+    zone:zoneOf(la,lo),
+    score:(gc!==""&&gf!=="")?(gc+" - "+gf):""
+  };
+}
+function findMatches(j){
+  if(Array.isArray(j)){
+    if(j.length&&j[0]&&typeof j[0]==="object"&&!Array.isArray(j[0])){
+      var ks=Object.keys(j[0]).join(" ").toLowerCase();
+      if(/nombre_casa|comienzo|codacta|home|casa/.test(ks)) return j;
+    }
+    for(var i=0;i<j.length;i++){var r=findMatches(j[i]);if(r&&r.length) return r;}
+    return [];
+  }
+  if(j&&typeof j==="object"){var k=Object.keys(j);for(var x=0;x<k.length;x++){var r2=findMatches(j[k[x]]);if(r2&&r2.length) return r2;}}
+  return [];
+}
+function groupIdOf(line){
+  line=line.trim(); if(!line) return "";
+  if(/^\d+$/.test(line)) return line;
+  var m=line.match(/grupId=(\d+)/); return m?m[1]:"";
+}
+
+async function loadAll(){
+  if(S.loading) return;
+  S.loading=true; S.errors=[]; render();
+  var res=await Promise.allSettled(S.groups.map(function(g){
+    return fetch(FN+g.id).then(function(r){
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      return r.json();
+    });
+  }));
+  var all=[], errs=[];
+  res.forEach(function(r,i){
+    var g=S.groups[i];
+    if(r.status==="fulfilled"){
+      var rows=findMatches(r.value).map(normalize);
+      if(!rows.length){errs.push((g.name||g.id)+": sense partits");return;}
+      rows.forEach(function(m){m.gid=g.id;});
+      if(!g.name) g.name=rows[0].cat;
+      all=all.concat(rows);
+    }else{
+      errs.push((g.name||g.id)+": "+(r.reason&&r.reason.message?r.reason.message:"error de xarxa"));
+    }
+  });
+  S.matches=all; S.errors=errs; S.loading=false; S.loaded=true; S.updated=new Date(); save(); render();
+}
+
+// ---------- filtros ----------
+function filtered(){
+  var r=curRange(), q=S.q.trim().toLowerCase();
+  return S.matches.filter(function(m){
+    if(m.date<r[0]||m.date>r[1]) return false;
+    if(S.day!=="all"&&m.date!==S.day) return false;
+    if(S.favOnly&&!S.fav[m.camp]) return false;
+    if(m.time&&(m.time<S.tmin||m.time>S.tmax)) return false;
+    if(S.zone&&m.zone!==S.zone) return false;
+    if(q&&(m.home+" "+m.away+" "+m.camp+" "+m.cat).toLowerCase().indexOf(q)<0) return false;
+    return true;
+  }).sort(function(a,b){
+    return a.date.localeCompare(b.date)||(a.time||"99").localeCompare(b.time||"99")||a.camp.localeCompare(b.camp);
+  });
+}
+
+// ---------- iconos ----------
+function ic(name,cls){
+  var p={
+    cal:'<rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/>',
+    pin:'<path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+    list:'<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/>',
+    gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/>',
+    star:'<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 17l-5.2 2.7 1-5.9L3.5 9.7l5.9-.8z"/>',
+    refresh:'<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>',
+    chev:'<path d="M6 9l6 6 6-6"/>'
+  }[name];
+  return '<svg class="i '+(cls||"")+'" viewBox="0 0 24 24" aria-hidden="true">'+p+'</svg>';
+}
+function starBtn(camp,on){
+  var label=(on?"Treu ":"Afegeix ")+camp+(on?" dels":" als")+" meus pavellons";
+  return '<button class="icon-btn'+(on?" on":"")+'" data-fav="'+esc(camp)+'" aria-pressed="'+(on?"true":"false")+'" aria-label="'+esc(label)+'">'+ic("star",on?"fill":"")+'</button>';
+}
+function mapLink(m){
+  if(m.lat==null||m.lng==null) return "";
+  return '<a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+m.lat+','+m.lng+'">Mapa</a>';
+}
+function shell(top,body){
+  return '<header class="top"><div class="top-in">'+top+'</div></header><section class="sheet">'+body+'</section>';
+}
+
+// ---------- pestaña Partits ----------
+function matchCard(m,mode){
+  var fav=!!S.fav[m.camp];
+  var tags='<span class="tag">'+esc(m.cat)+'</span>'+(m.zone&&m.zone!==NOLOC?'<span class="tag zone">'+esc(m.zone)+'</span>':'')+(m.score?'<span class="tag score">'+esc(m.score)+'</span>':'');
+  var sub = mode==="venue" ? '<span>'+esc(dname(m.date).slice(0,3))+" "+fromIso(m.date).getDate()+'</span>' : (m.jornada!==""?'<span>J'+esc(m.jornada)+'</span>':'');
+  return '<article class="match'+(fav?" fav":"")+'"><div class="mt"><b>'+esc(m.time||"--:--")+'</b>'+sub+'</div><div class="mb">'
+    +'<div class="teams">'+esc(m.home)+' <i>–</i> '+esc(m.away)+'</div>'
+    +'<div class="venue"><span class="name">'+esc(m.camp)+'</span><span class="acts">'+mapLink(m)+starBtn(m.camp,fav)+'</span></div>'
+    +'<div class="tags">'+tags+'</div></div></article>';
+}
+function renderList(){
+  var el=$("list"); if(!el) return;
+  if(S.loading&&!S.loaded){el.innerHTML='<div class="empty"><b>Carregant els partits…</b>Consultant la FCF.</div>';return;}
+  if(!S.matches.length){
+    el.innerHTML='<div class="empty"><b>Encara no hi ha dades</b>Afegeix un grup a la pestanya Grups i prem Actualitza.</div>';return;
+  }
+  var rows=filtered();
+  if(!rows.length){
+    var msg=S.favOnly?"Cap partit als teus pavellons en aquestes dates. Prova de treure el filtre de pavellons.":"Cap partit amb aquests filtres.";
+    el.innerHTML='<div class="empty"><b>Sense partits</b>'+esc(msg)+'</div>';return;
+  }
+  var html="";
+  if(S.view==="time"){
+    var cur="";
+    rows.forEach(function(m){
+      if(m.date!==cur){cur=m.date;var n=rows.filter(function(x){return x.date===cur;}).length;html+='<div class="sec"><h2>'+esc(dlong(cur))+'</h2><small>'+n+' partits</small></div>';}
+      html+=matchCard(m,"time");
+    });
+  }else{
+    var key=S.view==="venue"?"camp":"cat", g={}, order=[];
+    rows.forEach(function(m){var k=m[key];if(!g[k]){g[k]=[];order.push(k);}g[k].push(m);});
+    order.sort(function(a,b){
+      if(key==="camp"){var fa=S.fav[a]?0:1,fb=S.fav[b]?0:1;if(fa!==fb) return fa-fb;}
+      return a.localeCompare(b);
+    });
+    order.forEach(function(k){
+      html+='<div class="sec"><h2>'+(key==="camp"&&S.fav[k]?"★ ":"")+esc(k)+'</h2><small>'+g[k].length+' partits</small></div>';
+      g[k].forEach(function(m){html+=matchCard(m,key==="camp"?"venue":"time");});
+    });
+  }
+  el.innerHTML='<div class="list">'+html+'</div>';
+}
+function viewPartits(){
+  var r=curRange(), rows=filtered();
+  var camps={}; rows.forEach(function(m){camps[m.camp]=1;});
+  var nCamps=Object.keys(camps).length;
+  var favCount=Object.keys(S.fav).filter(function(k){return S.fav[k];}).length;
+  var upd=S.updated?'<span class="subline">Actualitzat a les '+p2(S.updated.getHours())+':'+p2(S.updated.getMinutes())+'</span>':'';
+  var top='<span class="eyebrow">'+esc(rangeTitle())+'</span><h1>'+esc(rangeLabel(r))+'</h1>'
+    +'<div class="actions"><button class="pill" data-act="reload"'+(S.loading?" disabled":"")+'>'+ic("refresh",S.loading?"spin":"")+(S.loading?"Actualitzant":"Actualitza")+'</button>'+upd+'</div>';
+
+  var b="";
+  if(S.errors.length) b+='<div class="msg err">No s\'ha pogut llegir:\n'+esc(S.errors.join("\n"))+'</div>';
+  b+='<div class="tiles"><div class="tile red"><span>Partits</span><b>'+rows.length+'</b><em>en '+nCamps+' '+(nCamps===1?"pavelló":"pavellons")+' · '+S.groups.length+' grup'+(S.groups.length===1?"":"s")+'</em></div>'
+    +'<button class="tile dark" data-act="favonly" aria-pressed="'+S.favOnly+'"><span class="star">'+ic("star","fill")+'</span><span>Els meus pavellons</span><b>'+favCount+'</b><em>'+(S.favOnly?"Filtre actiu · toca per treure'l":(favCount?"Toca per veure només aquests":"Marca\'n a la pestanya Pavellons"))+'</em></button></div>';
+
+  b+='<div class="chips" role="group" aria-label="Interval">'
+    +[["today","Avui"],["this","Aquest cap de setmana"],["next","El vinent"],["custom","Altres dates"]].map(function(x){
+      return '<button class="chip" data-range="'+x[0]+'" aria-pressed="'+(S.range===x[0])+'">'+x[1]+'</button>';
+    }).join("")+'</div>';
+  if(S.range==="custom"){
+    b+='<div class="row"><div><label class="f" for="cfrom">Des del</label><input id="cfrom" type="date" value="'+esc(S.from||r[0])+'"></div><div><label class="f" for="cto">Fins al</label><input id="cto" type="date" value="'+esc(S.to||r[1])+'"></div></div>';
+  }
+  var a=fromIso(r[0]), bb=fromIso(r[1]), n=Math.round((bb-a)/86400000)+1;
+  if(n>=1&&n<=7){
+    var cnt={}; S.matches.forEach(function(m){ if(m.date>=r[0]&&m.date<=r[1]&&(!S.favOnly||S.fav[m.camp])) cnt[m.date]=(cnt[m.date]||0)+1; });
+    b+='<div class="days" role="group" aria-label="Dia">'
+      +'<button class="day" data-day="all" aria-pressed="'+(S.day==="all")+'"><span>Tots</span><b>'+Object.keys(cnt).reduce(function(s,k){return s+cnt[k];},0)+'</b><em>partits</em></button>';
+    for(var i=0;i<n;i++){
+      var d=addDays(a,i), k=iso(d);
+      b+='<button class="day" data-day="'+k+'" aria-pressed="'+(S.day===k)+'"><span>'+esc(DAYS[d.getDay()].slice(0,3))+'</span><b>'+d.getDate()+'</b><em>'+(cnt[k]||0)+' partits</em></button>';
+    }
+    b+='</div>';
+  }
+  var zs={}; S.matches.forEach(function(m){zs[m.zone]=1;});
+  var zopts='<option value="">Totes</option>'+Object.keys(zs).sort().map(function(z){return '<option value="'+esc(z)+'"'+(z===S.zone?" selected":"")+'>'+esc(z)+'</option>';}).join("");
+  b+='<details class="box"><summary>Més filtres '+ic("chev","chev")+'</summary>'
+    +'<div class="row"><div><label class="f" for="tmin">Des de</label><input id="tmin" type="time" value="'+esc(S.tmin)+'"></div><div><label class="f" for="tmax">Fins a</label><input id="tmax" type="time" value="'+esc(S.tmax)+'"></div></div>'
+    +'<div class="row"><div><label class="f" for="zone">Zona de Barcelona</label><select id="zone">'+zopts+'</select></div><div><label class="f" for="q">Cerca</label><input id="q" type="search" placeholder="Equip, pavelló, categoria" value="'+esc(S.q)+'"></div></div>'
+    +'<p class="msg">La zona és aproximada, calculada amb les coordenades del pavelló.</p></details>';
+  b+='<div class="seg" role="group" aria-label="Agrupació">'
+    +[["time","Per hora"],["venue","Per pavelló"],["cat","Per categoria"]].map(function(x){return '<button data-view="'+x[0]+'" aria-pressed="'+(S.view===x[0])+'">'+x[1]+'</button>';}).join("")+'</div>';
+  b+='<div id="list"></div>';
+  return shell(top,b);
+}
+
+// ---------- pestaña Pavellons ----------
+function viewPavellons(){
+  var r=curRange(), v={};
+  S.matches.forEach(function(m){
+    var o=v[m.camp]||(v[m.camp]={camp:m.camp,zone:m.zone,total:0,inRange:0,lat:m.lat,lng:m.lng});
+    o.total++; if(m.date>=r[0]&&m.date<=r[1]) o.inRange++;
+  });
+  Object.keys(S.fav).forEach(function(k){ if(S.fav[k]&&!v[k]) v[k]={camp:k,zone:"",total:0,inRange:0}; });
+  var list=Object.keys(v).map(function(k){return v[k];}).sort(function(a,b){
+    var fa=S.fav[a.camp]?0:1,fb=S.fav[b.camp]?0:1; if(fa!==fb) return fa-fb;
+    return b.inRange-a.inRange||a.camp.localeCompare(b.camp);
+  });
+  var top='<span class="eyebrow">Els teus llocs</span><h1>Pavellons</h1><span class="subline">Marca els que et interessen i podràs filtrar-los des de Partits.</span>';
+  var b="";
+  if(!list.length) return shell(top,'<div class="empty"><b>Encara no hi ha pavellons</b>Carrega almenys un grup perquè hi apareguin.</div>');
+  b+='<p class="msg">La barra mostra quants partits del pavelló cauen a l\'interval triat ('+esc(rangeLabel(r))+').</p><div class="rows">';
+  list.forEach(function(o){
+    var on=!!S.fav[o.camp], pct=o.total?Math.round(o.inRange/o.total*100):0;
+    b+='<div class="row-card'+(on?" fav":"")+'"><div class="grow"><b>'+esc(o.camp)+'</b><small>'+esc(o.zone&&o.zone!==NOLOC?o.zone:"Ubicació desconeguda")+' · '+o.inRange+' a l\'interval · '+o.total+' en total</small></div>'
+      +(o.lat!=null?'<a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+o.lat+','+o.lng+'">Mapa</a>':'')
+      +'<label class="switch"><input type="checkbox" data-venue="'+esc(o.camp)+'"'+(on?" checked":"")+' aria-label="Pavelló preferit: '+esc(o.camp)+'"><span></span></label>'
+      +'<div class="bar" aria-hidden="true"><i style="width:'+pct+'%"></i></div></div>';
+  });
+  return shell(top,b+'</div>');
+}
+
+// ---------- pestaña Grups ----------
+function viewGrups(){
+  var top='<span class="eyebrow">Competicions</span><h1>Grups</h1><span class="subline">Es queden desats en aquest dispositiu.</span>';
+  var b='<div class="rows">';
+  S.groups.forEach(function(g){
+    var n=S.matches.filter(function(m){return m.gid===g.id;}).length;
+    b+='<div class="row-card"><div class="grow"><b>'+esc(g.name||"Grup "+g.id)+'</b><small>Identificador '+esc(g.id)+(S.loaded?' · '+n+' partits':'')+'</small></div><button class="link-del" data-del="'+esc(g.id)+'" aria-label="Treu el grup '+esc(g.name||g.id)+'">Treu</button></div>';
+  });
+  b+='</div>';
+  if(!S.groups.length) b+='<div class="empty"><b>Cap grup</b>Afegeix un enllaç de la FCF aquí sota.</div>';
+  b+='<div class="box"><div><label class="f" for="newlinks">Afegeix grups (un enllaç per línia)</label><textarea id="newlinks" placeholder="https://www.fcf.cat/ca/competicio?...&grupId=..."></textarea></div>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="pill" data-act="addgroups">Afegeix i carrega</button><button class="pill line" data-act="reload">'+ic("refresh")+'Actualitza</button></div>'
+    +(S.addMsg?'<div class="msg">'+esc(S.addMsg)+'</div>':'')+'</div>';
+  if(S.errors.length) b+='<div class="msg err">No s\'ha pogut llegir:\n'+esc(S.errors.join("\n"))+'</div>';
+  return shell(top,b);
+}
+
+// ---------- pestaña Ajustos ----------
+function viewAjustos(){
+  var opt=function(v,t){return '<option value="'+v+'"'+(S.defRange===v?" selected":"")+'>'+t+'</option>';};
+  var top='<span class="eyebrow">Preferències</span><h1>Ajustos</h1><span class="subline">Què veus en obrir l\'app.</span>';
+  var b='<div class="box"><div><label class="f" for="defrange">Interval en obrir</label><select id="defrange">'+opt("next","Cap de setmana vinent")+opt("this","Aquest cap de setmana")+opt("today","Avui")+'</select></div>'
+    +'<div class="row-card" style="padding:4px 0;background:transparent"><div class="grow"><b>Només els meus pavellons</b><small>Comença amb el filtre de pavellons preferits activat.</small></div>'
+    +'<label class="switch"><input type="checkbox" id="favdef"'+(S.favOnlyDef?" checked":"")+' aria-label="Només els meus pavellons en obrir"><span></span></label></div></div>'
+    +'<div class="box"><b>Dades desades</b><p class="msg">Grups, pavellons preferits i ajustos viuen en aquest navegador. Si canvies de mòbil o de navegador, hauràs de tornar-los a marcar.</p>'
+    +'<div><button class="pill danger" data-act="wipe">Esborra les dades desades</button></div></div>';
+  return shell(top,b);
+}
+
+// ---------- pintado ----------
+function renderTabs(){
+  var t=[["partits","Partits","cal"],["pavellons","Pavellons","pin"],["grups","Grups","list"],["ajustos","Ajustos","gear"]];
+  $("tabs").innerHTML=t.map(function(x){
+    return '<button data-tab="'+x[0]+'"'+(S.tab===x[0]?' aria-current="page"':'')+'>'+ic(x[2])+'<span>'+x[1]+'</span></button>';
+  }).join("");
+}
+function render(){
+  var fn={partits:viewPartits,pavellons:viewPavellons,grups:viewGrups,ajustos:viewAjustos}[S.tab];
+  $("view").innerHTML=fn();
+  renderTabs();
+  if(S.tab==="partits") renderList();
+}
+
+// ---------- eventos ----------
+document.addEventListener("click",function(e){
+  var t=e.target.closest("[data-tab],[data-range],[data-day],[data-view],[data-fav],[data-del],[data-act]");
+  if(!t) return;
+  if(t.dataset.tab){S.tab=t.dataset.tab;render();try{window.scrollTo(0,0);}catch(x){}return;}
+  if(t.dataset.range){S.range=t.dataset.range;S.day="all";render();return;}
+  if(t.dataset.day){S.day=t.dataset.day;render();return;}
+  if(t.dataset.view){S.view=t.dataset.view;render();return;}
+  if(t.dataset.fav!==undefined){var k=t.dataset.fav;S.fav[k]=!S.fav[k];if(!S.fav[k]) delete S.fav[k];save();render();return;}
+  if(t.dataset.del){S.groups=S.groups.filter(function(g){return g.id!==t.dataset.del;});S.matches=S.matches.filter(function(m){return m.gid!==t.dataset.del;});save();render();return;}
+  var a=t.dataset.act;
+  if(a==="reload"){loadAll();}
+  else if(a==="favonly"){S.favOnly=!S.favOnly;render();}
+  else if(a==="addgroups"){
+    var txt=($("newlinks").value||"").split(/\n+/).map(groupIdOf).filter(Boolean), added=0;
+    txt.forEach(function(id){ if(!S.groups.some(function(g){return g.id===id;})){S.groups.push({id:id,name:""});added++;} });
+    S.addMsg=txt.length?(added+" grup(s) afegit(s)."+(txt.length>added?" Els altres ja hi eren.":"")):"No he trobat cap grupId als enllaços enganxats.";
+    save(); if(added){loadAll();} else render();
+  }
+  else if(a==="wipe"){
+    try{localStorage.removeItem(LSK);}catch(x){}
+    S.groups=[{id:"58454277",name:""}];S.fav={};S.defRange="next";S.favOnlyDef=false;S.range="next";S.favOnly=false;S.matches=[];S.loaded=false;
+    render(); loadAll();
+  }
+});
+document.addEventListener("change",function(e){
+  var t=e.target;
+  if(t.dataset&&t.dataset.venue!==undefined){var k=t.dataset.venue;if(t.checked) S.fav[k]=true; else delete S.fav[k];save();render();return;}
+  if(t.id==="zone"){S.zone=t.value;renderList();}
+  else if(t.id==="tmin"){S.tmin=t.value||"00:00";renderList();}
+  else if(t.id==="tmax"){S.tmax=t.value||"23:59";renderList();}
+  else if(t.id==="cfrom"){S.from=t.value;if(!S.to||S.to<S.from) S.to=S.from;S.day="all";render();}
+  else if(t.id==="cto"){S.to=t.value;if(!S.from||S.from>S.to) S.from=S.to;S.day="all";render();}
+  else if(t.id==="defrange"){S.defRange=t.value;S.range=t.value;S.day="all";save();}
+  else if(t.id==="favdef"){S.favOnlyDef=t.checked;S.favOnly=t.checked;save();}
+});
+document.addEventListener("input",function(e){ if(e.target.id==="q"){S.q=e.target.value;renderList();} });
+
+// ---------- arranque ----------
+restore();
+render();
+loadAll();
+})();
+</script>
+</body>
+</html>
