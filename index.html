@@ -298,6 +298,53 @@ svg.i.fill{fill:currentColor}
 .zn.dist{display:inline-flex;align-items:center;gap:4px;border-color:transparent;background:var(--bc);color:var(--tc);font-weight:700}
 .zn.dist svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;margin:0}
 .hero .seg{margin:0}
+.when em.hot.live{background:#d92d20}
+
+/* pavellons: tarjetas grandes */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:16px;align-items:start}
+.vcard{background:var(--sheet);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 1px 3px rgba(20,24,30,.06);display:flex;flex-direction:column}
+.vcard.fav{border-color:var(--star);box-shadow:0 0 0 1px var(--star)}
+.vh{background:var(--ink);color:var(--on-ink);padding:14px 12px 14px 16px;display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.vh h3{font-family:var(--display);font-weight:700;font-size:1.45rem;line-height:1.1;overflow-wrap:anywhere}
+.vmeta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.vmeta span{font-size:.74rem;font-weight:600;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:2px 9px;color:#d5dae3;display:inline-flex;align-items:center;gap:4px}
+.vmeta .dist{background:rgba(255,255,255,.12);border-color:transparent}
+.vmeta svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+.vact{display:flex;align-items:center;gap:0;flex:0 0 auto}
+.vh .map{color:#ff7a70}
+.vh .icon-btn{color:#aeb6c4}
+.vh .icon-btn.on{color:var(--star)}
+.vsum{padding:10px 16px 4px;color:var(--muted);font-size:.84rem}
+.vsum b{font-family:var(--display);font-size:1.4rem;color:var(--fg);margin-right:2px}
+.livetag{color:#d92d20;font-weight:700;display:inline-flex;align-items:center;gap:5px}
+.vms{display:flex;flex-direction:column;padding:4px 12px 8px}
+.vm{--tc:hsl(var(--h) 62% 30%);--bc:hsl(var(--h) 70% 91%);display:grid;grid-template-columns:78px 1fr;gap:12px;padding:10px 4px;border-top:1px solid var(--line)}
+.vm:first-child{border-top:0}
+.vm.live{background:rgba(217,45,32,.06);border-radius:12px}
+.vt{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.vt b{font-family:var(--display);font-weight:700;font-size:1.55rem;line-height:1;font-variant-numeric:tabular-nums}
+.vt em{font-style:normal;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.vt em.hot{background:var(--accent);color:#fff;border-radius:999px;padding:1px 7px}
+.vt em.hot.live{background:#d92d20}
+.vb{display:flex;flex-direction:column;gap:5px;min-width:0;align-items:flex-start}
+.vb .tm{width:100%}
+.vb .crest{width:26px;height:26px;font-size:.78rem}
+.vb .tn{font-size:.9rem}
+.vb .cc{margin-top:2px}
+.vnone{padding:6px 16px 16px;color:var(--muted)}
+.vmore{margin:0 12px 12px;border:1px solid var(--line);background:transparent;border-radius:12px;padding:9px;font-weight:700;color:var(--fg)}
+:root[data-theme="dark"] .vm{--tc:hsl(var(--h) 75% 78%);--bc:hsl(var(--h) 35% 24%)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vm{--tc:hsl(var(--h) 75% 78%);--bc:hsl(var(--h) 35% 24%)}}
+@media (min-width:900px){.vgrid{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}}
+.chip{display:inline-flex;align-items:center;gap:6px}
+.chip svg{width:16px;height:16px}
+.mtags{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.cc.dv{background:transparent;border:1px solid var(--bc);color:var(--tc)}
+.hfilters>div{flex:1 1 150px;max-width:260px}
+.hero-tags{justify-content:flex-start;margin-top:8px}
+.hero .cc{background:rgba(255,255,255,.14);color:#fff}
+button.cc.add{border:1px dashed currentColor;background:transparent;color:var(--accent);cursor:pointer;font:inherit;font-size:.74rem;font-weight:700}
+.hero button.cc.add{color:#ff9d94;background:transparent}
 </style>
 </head>
 <body>
@@ -314,24 +361,26 @@ var LSK = "partitsFCF.v2";
 var HOME_DEF={lat:41.4207,lng:2.1900,label:"C/ Gran de la Sagrera, 48"};
 var S = {
   tab:"inici", groups:[{id:"58454277",name:""}], fav:{},
-  defRange:"next", favOnlyDef:false,
-  range:"next", from:"", to:"", day:"all", favOnly:false, view:"time",
+  defRange:"this", favOnlyDef:false,
+  range:"this", from:"", to:"", day:"all", favOnly:false, view:"time",
   tmin:"00:00", tmax:"23:59", zone:"", q:"",
   matches:[], loading:false, loaded:false, errors:[], updated:null, addMsg:"",
-  fcat:"", fdiv:"", collapsed:{}, editing:"", openVenue:{}, catOrder:[], divOrder:{}, hidePast:true, homeZone:"", homeFav:false, homeSort:"time", homeMax:0, home:{lat:41.4207,lng:2.1900,label:"C/ Gran de la Sagrera, 48"}
+  fcat:"", fdiv:"", collapsed:{}, editing:"", openVenue:{}, catOrder:[], divOrder:{}, hidePast:true, homeZone:"", homeFav:false, homeSort:"time", homeMax:0, homeCat:"", homeDiv:"", home:{lat:41.4207,lng:2.1900,label:"C/ Gran de la Sagrera, 48"}
 };
-function save(){try{localStorage.setItem(LSK,JSON.stringify({groups:S.groups,fav:S.fav,defRange:S.defRange,favOnlyDef:S.favOnlyDef,collapsed:S.collapsed,catOrder:S.catOrder,divOrder:S.divOrder,homeZone:S.homeZone,homeFav:S.homeFav,homeSort:S.homeSort,homeMax:S.homeMax,home:S.home}));}catch(e){}}
+function save(){try{localStorage.setItem(LSK,JSON.stringify({groups:S.groups,fav:S.fav,defRange:S.defRange,favOnlyDef:S.favOnlyDef,collapsed:S.collapsed,catOrder:S.catOrder,divOrder:S.divOrder,v:2,homeCat:S.homeCat,homeDiv:S.homeDiv,homeZone:S.homeZone,homeFav:S.homeFav,homeSort:S.homeSort,homeMax:S.homeMax,home:S.home}));}catch(e){}}
 function restore(){
   try{
     var j=JSON.parse(localStorage.getItem(LSK)||"null");
     if(j){
       if(Array.isArray(j.groups)&&j.groups.length) S.groups=j.groups;
       if(j.fav&&typeof j.fav==="object") S.fav=j.fav;
-      if(j.defRange) S.defRange=j.defRange;
+      if(j.defRange) S.defRange=(j.v>=2?j.defRange:"this");
       S.favOnlyDef=!!j.favOnlyDef;
       if(j.collapsed&&typeof j.collapsed==="object") S.collapsed=j.collapsed;
       if(typeof j.homeZone==="string") S.homeZone=j.homeZone;
       S.homeFav=!!j.homeFav;
+      if(typeof j.homeCat==="string") S.homeCat=j.homeCat;
+      if(typeof j.homeDiv==="string") S.homeDiv=j.homeDiv;
       if(j.homeSort) S.homeSort=j.homeSort;
       S.homeMax=+j.homeMax||0;
       if(j.home&&isFinite(j.home.lat)&&isFinite(j.home.lng)) S.home=j.home;
@@ -552,8 +601,10 @@ function viewInici(){
   }
   var inDays=pool.filter(function(m){return days.indexOf(m.date)>=0;});
   var zs={}; inDays.forEach(function(m){if(m.zone&&m.zone!==NOLOC)zs[m.zone]=1;});
+  var cs={},ds={}; inDays.forEach(function(m){var g=GM[m.gid]||{};cs[g.cat||NOCAT]=1;ds[g.div||NODIV]=1;});
   var favN=inDays.filter(function(m){return S.fav[m.camp];}).length;
   var rows=inDays.filter(function(m){return (!S.homeZone||m.zone===S.homeZone)&&(!S.homeFav||S.fav[m.camp]);})
+    .filter(function(m){var g=GM[m.gid]||{};return (!S.homeCat||(g.cat||NOCAT)===S.homeCat)&&(!S.homeDiv||(g.div||NODIV)===S.homeDiv);})
     .filter(function(m){if(!S.homeMax) return true;var d=homeDist(m);return d!=null&&d<=S.homeMax;});
   var byDist=S.homeSort==="dist";
   rows.sort(function(a,b){
@@ -568,8 +619,11 @@ function viewInici(){
   if(S.loading&&!S.loaded) return shell(top,'<div class="empty"><b>Carregant els partits…</b>Consultant la FCF.</div>');
   if(!first) return shell(top,b+'<div class="empty"><b>Cap partit pròxim</b>Afegeix grups a la pestanya Grups o prem Actualitza.</div>');
   var zopts='<option value="">Tots els barris</option>'+Object.keys(zs).sort().map(function(z){return '<option value="'+esc(z)+'"'+(z===S.homeZone?" selected":"")+'>'+esc(z)+'</option>';}).join("");
+  var oo=function(map,cur,all){return '<option value="">'+all+'</option>'+Object.keys(map).sort().map(function(z){return '<option value="'+esc(z)+'"'+(z===cur?" selected":"")+'>'+esc(z)+'</option>';}).join("");};
   var mopt=function(v,t){return '<option value="'+v+'"'+(S.homeMax===v?" selected":"")+'>'+t+'</option>';};
   b+='<div class="hfilters"><div><label class="f" for="hzone">Barri / zona</label><select id="hzone">'+zopts+'</select></div>'
+    +'<div><label class="f" for="hcat">Categoria</label><select id="hcat">'+oo(cs,S.homeCat,"Totes")+'</select></div>'
+    +'<div><label class="f" for="hdiv">Divisió</label><select id="hdiv">'+oo(ds,S.homeDiv,"Totes")+'</select></div>'
     +'<div><label class="f" for="hmax">Distància màxima</label><select id="hmax">'+mopt(0,"Qualsevol")+mopt(1,"1 km")+mopt(2,"2 km")+mopt(3,"3 km")+mopt(5,"5 km")+mopt(8,"8 km")+'</select></div>'
     +'<button class="chip" data-act="hfav" aria-pressed="'+S.homeFav+'">'+ic("star",S.homeFav?"fill":"")+' Els meus pavellons</button></div>';
   if(!rows.length){
@@ -581,15 +635,17 @@ function viewInici(){
   var big=live?"S'està jugant":(h.date===today?(mins<60?"Comença en "+mins+" min":"Comença en "+durTxt(mins)):dlong(h.date));
   var small=live?("Va començar fa "+(-mins)+" min"):(h.date===today?("a les "+h.time):("a les "+h.time));
   var hz=(h.zone&&h.zone!==NOLOC)?h.zone:"";
-  b+='<div class="hero'+(live?" live":"")+'" style="--h:'+hueOf((GM[h.gid]||{}).cat||(GM[h.gid]||{}).name||(GM[h.gid]||{}).orig||h.cat)+'"><div class="hero-t"><span class="hl">'+(live?'<i class="dot"></i>':'')+(live?"Ara":(byDist?"El més a prop de casa":"El pròxim partit"))+'</span><b>'+esc(big)+'</b><em>'+esc(small)+'</em></div>'
+  b+='<div class="hero'+(live?" live":"")+'" style="--h:'+hueOf((GM[h.gid]||{}).cat||(GM[h.gid]||{}).name||(GM[h.gid]||{}).orig||h.cat)+'"><div class="hero-t"><span class="hl">'+(live?'<i class="dot"></i>':'')+(live?"Ara":(byDist?"El més a prop de casa":"El pròxim partit"))+'</span><b>'+esc(big)+'</b><em>'+esc(small)+'</em>'+(function(){var g=GM[h.gid]||{};var t=[g.cat,g.div,g.grp?"Grup "+g.grp:""].filter(Boolean);return t.length?'<span class="mtags hero-tags">'+t.map(function(x){return '<span class="cc">'+esc(x)+'</span>';}).join("")+'</span>':'<span class="mtags hero-tags"><span class="cc">'+esc(g.name||g.orig||h.cat)+'</span><button class="cc add" data-classify="'+esc(h.gid)+'">+ Categoria i divisió</button></span>';})()+'</div>'
     +'<div class="hero-m"><div class="tm">'+crest(h.home)+'<span class="tn">'+esc(h.home)+'</span></div><div class="tm">'+crest(h.away)+'<span class="tn">'+esc(h.away)+'</span></div></div>'
     +'<div class="hero-v"><span class="name">'+ic("pin")+'<span>'+esc(h.camp)+(hz?' · '+esc(hz):'')+(distTxt(h)?' · '+esc(distTxt(h)):'')+'</span></span><span class="acts">'+mapLink(h)+starBtn(h.camp,!!S.fav[h.camp])+'</span></div></div>';
   GM=gMap();
   var rest=rows.slice(1), html="", cur="";
-  var multi=days.length>1;
   rest.forEach(function(m){
     if(byDist){html+=matchCard(m,"venue");return;}
-    if(m.date!==cur){cur=m.date;if(multi||cur!==h.date){html+='<div class="sec"><h2>'+esc(cur===today?"Més tard avui":dlong(cur))+'</h2></div>';}else html+='<div class="sec"><h2>Després</h2></div>';}
+    var started=m.date===today&&startOf(m)<=now;
+    var key=started?"live":m.date;
+    if(key!==cur){cur=key;
+      html+='<div class="sec"><h2>'+esc(started?"També en joc ara":(m.date===today?"Més tard avui":dlong(m.date)))+'</h2></div>';}
     html+=matchCard(m,"time");
   });
   if(byDist&&rest.length) html='<div class="sec"><h2>Pròxims, del més a prop al més lluny</h2></div>'+html;
@@ -614,6 +670,7 @@ function initials(n){
 function crest(n){return '<span class="crest" style="--ch:'+hueOf(n)+'" aria-hidden="true">'+esc(initials(n))+'</span>';}
 function dayBadge(m,mode){
   var t=iso(new Date()), tm=iso(addDays(new Date(),1));
+  if(m.date===t&&m.time&&startOf(m)<=new Date()&&!isOver(m)) return '<em class="hot live">En joc</em>';
   if(m.date===t) return '<em class="hot">Avui</em>';
   if(m.date===tm) return '<em class="hot">Demà</em>';
   if(mode==="venue") return '<em>'+esc(dname(m.date).slice(0,3))+" "+fromIso(m.date).getDate()+'</em>';
@@ -622,12 +679,13 @@ function dayBadge(m,mode){
 function matchCard(m,mode){
   var fav=!!S.fav[m.camp], g=GM[m.gid]||{};
   var label=[g.cat,g.div].filter(Boolean).join(" · ")||g.name||g.orig||m.cat;
+  var tagsH=(g.cat||g.div)?((g.cat?'<span class="cc">'+esc(g.cat)+'</span>':'')+(g.div?'<span class="cc dv">'+esc(g.div)+'</span>':'')+(g.grp?'<span class="cc dv">G'+esc(g.grp)+'</span>':'')):'<span class="cc">'+esc(label)+'</span><button class="cc add" data-classify="'+esc(m.gid)+'">+ Categoria i divisió</button>';
   var sc=m.score?m.score.split(" - "):["",""];
   var hue=hueOf(g.cat||g.name||g.orig||m.cat);
   var zn=(m.zone&&m.zone!==NOLOC)?'<span class="zn">'+esc(m.zone)+'</span>':"";
   var dt=distTxt(m); if(dt) zn='<span class="zn dist">'+ic("walk")+esc(dt)+'</span>'+zn;
   return '<article class="match'+(fav?" fav":"")+'" style="--h:'+hue+'">'
-    +'<div class="mh"><span class="when"><b>'+esc(m.time||"--:--")+'</b>'+dayBadge(m,mode)+'</span><span class="grow"></span><span class="cc">'+esc(label)+(g.grp?' · G'+esc(g.grp):'')+'</span></div>'
+    +'<div class="mh"><span class="when"><b>'+esc(m.time||"--:--")+'</b>'+dayBadge(m,mode)+'</span><span class="grow"></span><span class="mtags">'+tagsH+'</span></div>'
     +'<div class="mteams"><div class="tm">'+crest(m.home)+'<span class="tn">'+esc(m.home)+'</span>'+(m.score?'<span class="sc">'+esc(sc[0])+'</span>':'')+'</div>'
     +'<div class="tm vs">VS</div>'
     +'<div class="tm">'+crest(m.away)+'<span class="tn">'+esc(m.away)+'</span>'+(m.score?'<span class="sc">'+esc(sc[1])+'</span>':'')+'</div></div>'
@@ -718,47 +776,58 @@ function viewPartits(){
 }
 
 // ---------- pestaña Pavellons ----------
+function venueMatchRow(m,gm,mode){
+  var g=gm[m.gid]||{}, now=new Date(), today=iso(now);
+  var live=m.date===today&&m.time&&startOf(m)<=now&&!isOver(m);
+  var badge=live?'<em class="hot live">En joc</em>':(m.date===today?'<em class="hot">Avui</em>':'<em>'+esc(dname(m.date).slice(0,3))+' '+fromIso(m.date).getDate()+'</em>');
+  var lbl=[g.cat,g.div].filter(Boolean).join(" · ")||g.name||g.orig||m.cat;
+  return '<div class="vm'+(live?" live":"")+'" style="--h:'+hueOf(g.cat||g.name||g.orig||m.cat)+'"><div class="vt"><b>'+esc(m.time||"--:--")+'</b>'+badge+'</div>'
+    +'<div class="vb"><div class="tm">'+crest(m.home)+'<span class="tn">'+esc(m.home)+'</span></div><div class="tm">'+crest(m.away)+'<span class="tn">'+esc(m.away)+'</span></div>'
+    +'<span class="cc">'+esc(lbl)+(g.grp?' · G'+esc(g.grp):'')+'</span></div></div>';
+}
 function viewPavellons(){
-  var r=curRange(), v={}, gm=gMap(), today=iso(new Date());
+  var r=curRange(), v={}, gm=gMap(); GM=gm;
   S.matches.forEach(function(m){
-    var o=v[m.camp]||(v[m.camp]={camp:m.camp,zone:m.zone,total:0,inRange:[],next:null,lat:m.lat,lng:m.lng,groups:{}});
-    var g=gm[m.gid]||{};
-    o.total++; o.groups[gDisp(g)]=1;
-    if(m.date>=r[0]&&m.date<=r[1]) o.inRange.push(m);
-    if(m.date>=today&&(!o.next||(m.date+(m.time||""))<(o.next.date+(o.next.time||"")))) o.next=m;
+    var o=v[m.camp]||(v[m.camp]={camp:m.camp,zone:m.zone,total:0,inRange:[],lat:m.lat,lng:m.lng});
+    o.total++;
+    if(m.date>=r[0]&&m.date<=r[1]&&!(S.hidePast&&isOver(m))) o.inRange.push(m);
   });
-  Object.keys(S.fav).forEach(function(k){ if(S.fav[k]&&!v[k]) v[k]={camp:k,zone:"",total:0,inRange:[],next:null,groups:{}}; });
-  var list=Object.keys(v).map(function(k){return v[k];});
-  if(S.venRange) list=list.filter(function(o){return o.inRange.length>0||S.fav[o.camp];});
+  Object.keys(S.fav).forEach(function(k){ if(S.fav[k]&&!v[k]) v[k]={camp:k,zone:"",total:0,inRange:[]}; });
+  var list=Object.keys(v).map(function(k){var o=v[k];o.inRange.sort(function(a,c){return (a.date+(a.time||"99")).localeCompare(c.date+(c.time||"99"));});o.d=distKmHome(o);return o;});
+  list=list.filter(function(o){return o.inRange.length>0||S.fav[o.camp];});
+  if(S.venFav) list=list.filter(function(o){return S.fav[o.camp];});
+  var bySort=S.venSort||"next";
   list.sort(function(a,b){
     var fa=S.fav[a.camp]?0:1,fb=S.fav[b.camp]?0:1; if(fa!==fb) return fa-fb;
-    return b.inRange.length-a.inRange.length||a.camp.localeCompare(b.camp);
+    if(bySort==="dist"){var da=a.d==null?1e9:a.d,db=b.d==null?1e9:b.d;if(da!==db) return da-db;}
+    var na=a.inRange[0]?a.inRange[0].date+(a.inRange[0].time||""):"9",nb=b.inRange[0]?b.inRange[0].date+(b.inRange[0].time||""):"9";
+    return na.localeCompare(nb)||a.camp.localeCompare(b.camp);
   });
-  var top='<span class="eyebrow">Els teus llocs</span><h1>Pavellons</h1><span class="subline">'+list.length+' pavellons · interval: '+esc(rangeLabel(r))+'</span>';
+  var top='<span class="eyebrow">Els teus llocs</span><h1>Pavellons</h1><span class="subline">'+list.length+' pavellons amb partits · '+esc(rangeLabel(r))+'</span>';
   if(!S.matches.length) return shell(top,'<div class="empty"><b>Encara no hi ha pavellons</b>Carrega almenys un grup perquè hi apareguin.</div>');
-  var b='<div class="chips"><button class="chip" data-act="venrange" aria-pressed="'+!!S.venRange+'">Només amb partits a l\'interval</button></div>'
-    +'<p class="msg">Marca els pavellons que et interessen per filtrar-los a Partits. Toca «Partits» per veure què s\'hi juga a l\'interval triat.</p><div class="rows">';
+  var b='<div class="chips" role="group" aria-label="Interval">'
+    +[["today","Avui"],["this","Aquest cap de setmana"],["next","El vinent"]].map(function(x){return '<button class="chip" data-range="'+x[0]+'" aria-pressed="'+(S.range===x[0])+'">'+x[1]+'</button>';}).join("")
+    +'<button class="chip" data-act="venfav" aria-pressed="'+!!S.venFav+'">'+ic("star",S.venFav?"fill":"")+' Només preferits</button>'
+    +'<button class="chip" data-act="vensort" aria-pressed="'+(bySort==="dist")+'">'+ic("walk")+' Pel més a prop</button></div>';
+  b+='<div class="vgrid">';
   list.forEach(function(o){
-    var on=!!S.fav[o.camp], n=o.inRange.length, open=!!S.openVenue[o.camp];
-    var gl=Object.keys(o.groups).slice(0,4), more=Object.keys(o.groups).length-gl.length;
-    var nextTxt=o.next?('Pròxim partit: '+dlong(o.next.date)+(o.next.time?' · '+o.next.time:'')+' · '+o.next.home+' – '+o.next.away):'Cap partit programat a partir d\'avui';
-    var pct=o.total?Math.round(n/o.total*100):0;
-    b+='<div class="row-card'+(on?" fav":"")+'"><div class="grow"><b>'+esc(o.camp)+'</b>'
-      +'<small>'+esc(o.zone&&o.zone!==NOLOC?o.zone:"Ubicació desconeguda")+' · '+n+' a l\'interval · '+o.total+' en total</small>'
-      +'<span class="vnext">'+esc(nextTxt)+'</span>'
-      +(gl.length?'<div class="mini">'+gl.map(function(x){return '<span>'+esc(x)+'</span>';}).join("")+(more>0?'<span>+'+more+'</span>':'')+'</div>':'')+'</div>'
-      +(o.lat!=null?'<a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+o.lat+','+o.lng+'">Mapa</a>':'')
-      +'<label class="switch"><input type="checkbox" data-venue="'+esc(o.camp)+'"'+(on?" checked":"")+' aria-label="Pavelló preferit: '+esc(o.camp)+'"><span></span></label>'
-      +(n?'<button class="expand" data-vopen="'+esc(o.camp)+'" aria-expanded="'+open+'">'+(open?"Amaga":"Partits ("+n+")")+'</button>':'')
-      +(open&&n?'<div class="vlist">'+o.inRange.slice().sort(function(a,c){return (a.date+a.time).localeCompare(c.date+c.time);}).map(function(m){
-          var g=gm[m.gid]||{};
-          return '<div class="vitem"><b>'+esc(dname(m.date).slice(0,3))+' '+fromIso(m.date).getDate()+' · '+esc(m.time||"--:--")+'</b><span>'+esc(m.home)+' – '+esc(m.away)+'<small>'+esc([gDisp(g),g.cat,g.div].filter(Boolean).join(" · "))+'</small></span></div>';
-        }).join("")+'</div>':'')
-      +'<div class="bar" aria-hidden="true"><i style="width:'+pct+'%"></i></div></div>';
+    var on=!!S.fav[o.camp], n=o.inRange.length, open=!!S.openVenue[o.camp], LIM=5;
+    var shown=open?o.inRange:o.inRange.slice(0,LIM);
+    var dt=o.lat!=null?distTxt({lat:o.lat,lng:o.lng}):"";
+    var live=o.inRange.some(function(m){return m.date===iso(new Date())&&m.time&&startOf(m)<=new Date();});
+    b+='<article class="vcard'+(on?" fav":"")+'"><header class="vh"><div class="vt1"><h3>'+esc(o.camp)+'</h3>'
+      +'<div class="vmeta">'+(o.zone&&o.zone!==NOLOC?'<span>'+esc(o.zone)+'</span>':'')+(dt?'<span class="dist">'+ic("walk")+esc(dt)+'</span>':'')+'</div></div>'
+      +'<div class="vact">'+(o.lat!=null?'<a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+o.lat+','+o.lng+'">Mapa</a>':'')+starBtn(o.camp,on)+'</div></header>'
+      +'<div class="vsum"><b>'+n+'</b> '+(n===1?"partit":"partits")+(live?' · <span class="livetag"><i class="dot"></i>en joc ara</span>':'')+'</div>'
+      +(n?'<div class="vms">'+shown.map(function(m){return venueMatchRow(m,gm);}).join("")+'</div>':'<div class="vnone">Cap partit en aquest interval.</div>')
+      +(n>LIM?'<button class="vmore" data-vopen="'+esc(o.camp)+'" aria-expanded="'+open+'">'+(open?"Mostra'n menys":"Mostra'n "+(n-LIM)+" més")+'</button>':'')
+      +'</article>';
   });
-  if(!list.length) b+='<div class="empty"><b>Cap pavelló amb partits a l\'interval</b>Treu el filtre o canvia les dates.</div>';
-  return shell(top,b+'</div>');
+  b+='</div>';
+  if(!list.length) b+='<div class="empty"><b>Cap pavelló amb partits</b>Prova un altre interval o treu el filtre de preferits.</div>';
+  return shell(top,b);
 }
+function distKmHome(o){return o.lat!=null?homeDist({lat:o.lat,lng:o.lng}):null;}
 
 // ---------- pestaña Grups ----------
 var CATS_DEF=["Sènior","Juvenil","Cadet","Infantil","Aleví","Benjamí","Prebenjamí","Femení"];
@@ -868,7 +937,7 @@ function render(){
 
 // ---------- eventos ----------
 document.addEventListener("click",function(e){
-  var t=e.target.closest("[data-tab],[data-range],[data-day],[data-view],[data-fav],[data-del],[data-act],[data-toggle],[data-edit],[data-vopen],[data-mv],[data-hsort]");
+  var t=e.target.closest("[data-tab],[data-range],[data-day],[data-view],[data-fav],[data-del],[data-act],[data-toggle],[data-edit],[data-vopen],[data-mv],[data-hsort],[data-classify]");
   if(!t) return;
   if(t.dataset.tab){S.tab=t.dataset.tab;render();try{window.scrollTo(0,0);}catch(x){}return;}
   if(t.dataset.range){S.range=t.dataset.range;S.day="all";render();return;}
@@ -876,6 +945,7 @@ document.addEventListener("click",function(e){
   if(t.dataset.view){S.view=t.dataset.view;render();return;}
   if(t.dataset.fav!==undefined){var k=t.dataset.fav;S.fav[k]=!S.fav[k];if(!S.fav[k]) delete S.fav[k];save();render();return;}
   if(t.dataset.toggle){var tk=t.dataset.toggle;if(S.collapsed[tk]) delete S.collapsed[tk]; else S.collapsed[tk]=true;save();render();return;}
+  if(t.dataset.classify){S.tab="grups";S.editing=t.dataset.classify;delete S.collapsed["c:"+NOCAT];delete S.collapsed["d:"+NOCAT+"|"+NODIV];var cg=S.groups.filter(function(g){return g.id===S.editing;})[0];if(cg){delete S.collapsed["c:"+(cg.cat||NOCAT)];delete S.collapsed["d:"+(cg.cat||NOCAT)+"|"+(cg.div||NODIV)];}save();render();var ed=$("ed-cat");if(ed){try{ed.scrollIntoView({block:"center"});ed.focus();}catch(x){}}return;}
   if(t.dataset.hsort){S.homeSort=t.dataset.hsort;save();render();return;}
   if(t.dataset.mv){var mp=t.dataset.mv.split("¦");moveItem(mp[0],mp[1],+mp[2]);render();return;}
   if(t.dataset.edit){S.editing=(S.editing===t.dataset.edit)?"":t.dataset.edit;render();return;}
@@ -889,6 +959,8 @@ document.addEventListener("click",function(e){
     S.geoMsg="Buscant la teva ubicació…";render();
     navigator.geolocation.getCurrentPosition(function(p){S.home={lat:p.coords.latitude,lng:p.coords.longitude,label:"La meva ubicació"};S.geoMsg="";save();render();},function(){S.geoMsg="No he pogut obtenir la ubicació (permís denegat?).";render();},{timeout:10000});
   }
+  else if(a==="venfav"){S.venFav=!S.venFav;render();}
+  else if(a==="vensort"){S.venSort=(S.venSort==="dist")?"next":"dist";render();}
   else if(a==="hfav"){S.homeFav=!S.homeFav;save();render();}
   else if(a==="hidepast"){S.hidePast=!S.hidePast;render();}
   else if(a==="favonly"){S.favOnly=!S.favOnly;render();}
@@ -916,13 +988,15 @@ document.addEventListener("click",function(e){
   }
   else if(a==="wipe"){
     try{localStorage.removeItem(LSK);}catch(x){}
-    S.groups=[{id:"58454277",name:""}];S.fav={};S.defRange="next";S.favOnlyDef=false;S.range="next";S.favOnly=false;S.matches=[];S.loaded=false;
+    S.groups=[{id:"58454277",name:""}];S.fav={};S.defRange="this";S.favOnlyDef=false;S.range="this";S.favOnly=false;S.matches=[];S.loaded=false;
     render(); loadAll();
   }
 });
 document.addEventListener("change",function(e){
   var t=e.target;
   if(t.dataset&&t.dataset.venue!==undefined){var k=t.dataset.venue;if(t.checked) S.fav[k]=true; else delete S.fav[k];save();render();return;}
+  if(t.id==="hcat"){S.homeCat=t.value;save();render();return;}
+  if(t.id==="hdiv"){S.homeDiv=t.value;save();render();return;}
   if(t.id==="hmax"){S.homeMax=+t.value||0;save();render();return;}
   if(t.id==="hzone"){S.homeZone=t.value;save();render();return;}
   if(t.id==="zone"){S.zone=t.value;renderList();}
