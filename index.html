@@ -61,6 +61,7 @@ main{display:block}
 
 /* botones */
 .pill{border:0;border-radius:999px;background:var(--accent);color:var(--on-accent);font-weight:700;padding:11px 20px;display:inline-flex;gap:8px;align-items:center;justify-content:center}
+.vsearch{margin:6px 0 4px}.vsearch input{width:100%}.vcount{margin:6px 2px}
 .pill.ghost{background:rgba(255,255,255,.12);color:inherit;font-weight:600;font-size:.85rem;padding:8px 14px}
 .pill.dark{background:var(--ink);color:var(--on-ink)}
 .pill.line{background:transparent;border:1px solid var(--line);color:var(--fg)}
@@ -466,9 +467,9 @@ var S = {
   range:"this", from:"", to:"", day:"all", favOnly:false, view:"time",
   tmin:"00:00", tmax:"23:59", zone:"", q:"",
   matches:[], loading:false, loaded:false, errors:[], updated:null, addMsg:"",
-  fcat:"", fdiv:"", collapsed:{}, editing:"", openVenue:{}, catOrder:[], divOrder:{}, hidePast:true, homeZone:"", homeFav:false, homeSort:"time", homeMax:0, homeCat:"", homeDiv:"", watch:{}, teams:{}, eqGroup:"", crestsOn:true, catColor:{}, colorEdit:"", pview:"list", notif:{on:false,lead:30,watch:true,teams:true,venues:false}, home:{lat:41.4207,lng:2.1900,label:"C/ Gran de la Sagrera, 48"}
+  fcat:"", fdiv:"", collapsed:{}, editing:"", openVenue:{}, catOrder:[], divOrder:{}, hidePast:true, homeZone:"", homeFav:false, homeSort:"time", homeMax:0, homeCat:"", homeDiv:"", watch:{}, teams:{}, eqGroup:"", crestsOn:true, catColor:{}, colorEdit:"", vq:"", pview:"list", notif:{on:false,lead:30,watch:true,teams:true,venues:false}, home:{lat:41.4207,lng:2.1900,label:"C/ Gran de la Sagrera, 48"}
 };
-var VERSION="v20 · 3 oct";
+var VERSION="v21 · 4 oct";
 function payload(){return {crestsOn:S.crestsOn,catColor:S.catColor,watch:S.watch,teams:S.teams,notif:S.notif,ts:S.ts||0,groups:S.groups,fav:S.fav,defRange:S.defRange,favOnlyDef:S.favOnlyDef,collapsed:S.collapsed,catOrder:S.catOrder,divOrder:S.divOrder,v:2,homeCat:S.homeCat,homeDiv:S.homeDiv,homeZone:S.homeZone,homeFav:S.homeFav,homeSort:S.homeSort,homeMax:S.homeMax,home:S.home};}
 var SYNC="https://vjydwzokefbmwxcwbukv.supabase.co/functions/v1/sync", SK="partitsFCF.sync";
 var syncCode=""; try{syncCode=localStorage.getItem(SK)||"";}catch(e){}
@@ -1190,7 +1191,8 @@ function venueMatchRow(m,gm,mode){
     +'<div class="vb"><div class="tm">'+crest(m.home)+'<span class="tn">'+esc(m.home)+'</span></div><div class="tm">'+crest(m.away)+'<span class="tn">'+esc(m.away)+'</span></div>'
     +'<span class="cc">'+esc(lbl)+(g.grp?' · G'+esc(g.grp):'')+'</span></div>'+heartBtn(m)+'</div>';
 }
-function viewPavellons(){
+function fold(x){return String(x||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+function venueList(){
   var r=curRange(), v={}, gm=gMap(); GM=gm;
   S.matches.forEach(function(m){
     var o=v[m.camp]||(v[m.camp]={camp:m.camp,zone:m.zone,total:0,inRange:[],lat:m.lat,lng:m.lng});
@@ -1199,7 +1201,9 @@ function viewPavellons(){
   });
   Object.keys(S.fav).forEach(function(k){ if(S.fav[k]&&!v[k]) v[k]={camp:k,zone:"",total:0,inRange:[]}; });
   var list=Object.keys(v).map(function(k){var o=v[k];o.inRange.sort(function(a,c){return (a.date+(a.time||"99")).localeCompare(c.date+(c.time||"99"));});o.d=distKmHome(o);return o;});
-  list=list.filter(function(o){return o.inRange.length>0||S.fav[o.camp];});
+  var vq=fold(S.vq).trim();
+  if(vq) list=list.filter(function(o){return fold(o.camp).indexOf(vq)>=0;});
+  else list=list.filter(function(o){return o.inRange.length>0||S.fav[o.camp];});
   if(S.venFav) list=list.filter(function(o){return S.fav[o.camp];});
   var bySort=S.venSort||"next";
   list.sort(function(a,b){
@@ -1208,13 +1212,22 @@ function viewPavellons(){
     var na=a.inRange[0]?a.inRange[0].date+(a.inRange[0].time||""):"9",nb=b.inRange[0]?b.inRange[0].date+(b.inRange[0].time||""):"9";
     return na.localeCompare(nb)||a.camp.localeCompare(b.camp);
   });
-  var top='<span class="eyebrow">Els teus llocs</span><h1>Pavellons</h1><span class="subline">'+list.length+' pavellons amb partits · '+esc(rangeLabel(r))+'</span>';
+  return {list:list,r:r,gm:gm,bySort:bySort,vq:vq};
+}
+function viewPavellons(){
+  var D=venueList(), list=D.list, r=D.r, gm=D.gm, bySort=D.bySort;
+  var top='<span class="eyebrow">Els teus llocs</span><h1>Pavellons</h1><span class="subline">'+esc(rangeLabel(r))+'</span>';
   if(!S.matches.length) return shell(top,'<div class="empty"><b>Encara no hi ha pavellons</b>Carrega almenys un grup perquè hi apareguin.</div>');
   var b='<div class="chips" role="group" aria-label="Interval">'
     +[["today","Avui"],["this","Aquest cap de setmana"],["next","El vinent"]].map(function(x){return '<button class="chip" data-range="'+x[0]+'" aria-pressed="'+(S.range===x[0])+'">'+x[1]+'</button>';}).join("")
     +'<button class="chip" data-act="venfav" aria-pressed="'+!!S.venFav+'">'+ic("star",S.venFav?"fill":"")+' Només preferits</button>'
     +'<button class="chip" data-act="vensort" aria-pressed="'+(bySort==="dist")+'">'+ic("walk")+' Pel més a prop</button></div>';
-  b+='<div class="vgrid">';
+  b+='<div class="vsearch"><label class="f" for="vq">Cerca pavelló</label><input id="vq" type="search" placeholder="Nom del pavelló" autocomplete="off" value="'+esc(S.vq||"")+'"></div>';
+  b+='<div id="vres">'+venueHTML(D)+'</div>';
+  return shell(top,b);
+}
+function venueHTML(D){
+  var list=D.list, gm=D.gm, b='<p class="msg vcount">'+list.length+(list.length===1?" pavelló":" pavellons")+(D.vq?(list.length===1?" trobat":" trobats"):" amb partits")+'</p><div class="vgrid">';
   list.forEach(function(o){
     var on=!!S.fav[o.camp], n=o.inRange.length, open=!!S.openVenue[o.camp], LIM=5;
     var shown=open?o.inRange:o.inRange.slice(0,LIM);
@@ -1229,9 +1242,10 @@ function viewPavellons(){
       +'</article>';
   });
   b+='</div>';
-  if(!list.length) b+='<div class="empty"><b>Cap pavelló amb partits</b>Prova un altre interval o treu el filtre de preferits.</div>';
-  return shell(top,b);
+  if(!list.length) b+=D.vq?'<div class="empty"><b>Cap pavelló amb aquest nom</b>Només surten els pavellons dels grups que has afegit.</div>':'<div class="empty"><b>Cap pavelló amb partits</b>Prova un altre interval o treu el filtre de preferits.</div>';
+  return b;
 }
+function renderVenues(){var el=document.getElementById("vres");if(el) el.innerHTML=venueHTML(venueList());}
 function distKmHome(o){return o.lat!=null?homeDist({lat:o.lat,lng:o.lng}):null;}
 
 // ---------- pestaña Grups ----------
@@ -1462,7 +1476,7 @@ document.addEventListener("change",function(e){
   else if(t.id==="defrange"){S.defRange=t.value;S.range=t.value;S.day="all";save();}
   else if(t.id==="favdef"){S.favOnlyDef=t.checked;S.favOnly=t.checked;save();}
 });
-document.addEventListener("input",function(e){ if(e.target.id==="q"){S.q=e.target.value;renderList();} });
+document.addEventListener("input",function(e){ if(e.target.id==="q"){S.q=e.target.value;renderList();} else if(e.target.id==="vq"){S.vq=e.target.value;renderVenues();} });
 
 // ---------- arranque ----------
 restore();
