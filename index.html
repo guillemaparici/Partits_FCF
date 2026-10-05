@@ -746,6 +746,59 @@ body.nosc{overflow:hidden}
 .evl button .crest{width:20px;height:20px;font-size:.55rem}
 .evl button[aria-pressed="true"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
 .evo .evn{font-size:.78rem;color:var(--mut);margin:0 0 6px}
+
+/* v28 */
+.icw{display:flex;flex-direction:column;gap:14px}
+.ic{display:flex;flex-direction:column;gap:6px}
+.ic b{font-family:var(--display);font-size:clamp(2.6rem,13vw,4.4rem);line-height:.95;font-weight:700;border-left:6px solid hsl(var(--ch) 85% 62%);padding-left:12px}
+.ic.sm b{font-size:clamp(1.8rem,9vw,2.8rem)}
+.ic span{display:flex;flex-wrap:wrap;gap:5px;padding-left:18px}
+.ic i{font-style:normal;font-size:.74rem;font-weight:700;background:rgba(255,255,255,.16);border-radius:999px;padding:3px 9px}
+.t3{display:flex;align-items:center;gap:12px}
+.t3 .rk{font-family:var(--display);font-size:3.4rem;line-height:1;width:34px;text-align:center;opacity:.9}
+.t3b{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.t3b small{font-size:.72rem;font-weight:700;letter-spacing:.04em;opacity:.85;text-transform:uppercase}
+.wins{display:flex;flex-direction:column;gap:10px;height:min(56vh,480px)}
+.win{position:relative;flex:1;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+.win .wf{position:absolute;inset:0 auto 0 0;width:var(--w);background:rgba(255,255,255,.3);transform-origin:left;animation:wgrow 1s .3s cubic-bezier(.2,.8,.2,1) both}
+.win.h .wf{background:rgba(255,255,255,.55)}.win.v .wf{background:rgba(255,255,255,.22)}
+.win b{position:relative;font-family:var(--display);font-size:min(24vw,6.4rem);line-height:1}
+.win b small{font-size:.4em;opacity:.8}
+.win span{position:relative;text-align:right;font-weight:800;font-size:1.05rem;display:flex;flex-direction:column}
+.win span em{font-style:normal;font-weight:500;opacity:.8;font-size:.78rem}
+@keyframes wgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.sl-foot b{font-weight:800}
+.rkn{font-family:var(--display);font-size:1.6rem;min-width:28px;text-align:center}
+.crw{display:flex;flex-wrap:wrap;gap:8px}
+.crw .crest{width:40px;height:40px}
+.gb{display:grid;grid-template-columns:90px 1fr 44px;gap:10px;align-items:center}
+.gb .gl{font-weight:700;font-size:.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gb .gt{height:16px;border-radius:8px;background:rgba(255,255,255,.14);overflow:hidden}
+.gb .gt i{display:block;height:100%;border-radius:8px;background:hsl(var(--ch) 85% 66%);animation:wgrow 1s .4s both;transform-origin:left}
+.gb b{font-family:var(--display);font-size:1.3rem;text-align:right}
+.sl-sub{font-size:.95rem;font-weight:800;letter-spacing:.04em;margin-top:6px;border-bottom:1px solid rgba(255,255,255,.3);padding-bottom:3px}
+
+/* v29 */
+.rw.cl{grid-template-columns:auto auto 1fr auto}
+.rw.cl .crest{width:30px;height:30px}
+.rw.cl b small{font-family:inherit;font-size:.6em;opacity:.8}
+.rkn.up{color:#6ee7a0;font-size:1.2rem}
+.cmp{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:0 12px;background:rgba(255,255,255,.1);border-radius:16px;padding:12px 16px;align-items:center}
+.cmp .cl{font-weight:700;font-size:.9rem;opacity:.9;grid-column:1}
+.cmp b{grid-column:1;grid-row:2;font-family:var(--display);font-size:3rem;line-height:1}
+.cmp .cd{grid-column:2;grid-row:1/3;text-align:right;font-weight:800;font-size:1.15rem;display:flex;flex-direction:column}
+.cmp .cd em{font-style:normal;font-weight:500;font-size:.78rem;opacity:.8}
+.cmp .cd.up{color:#6ee7a0}.cmp .cd.dn{color:#ff9a9a}.cmp .cd.z{opacity:.7}
+.nx{background:rgba(255,255,255,.1);border-radius:14px;padding:9px 12px;display:flex;flex-direction:column;gap:4px}
+.nx1{display:flex;align-items:center;gap:7px;font-weight:800;font-size:.9rem;min-width:0}
+.nx1 span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nx1 i{font-style:normal;opacity:.6;font-weight:600}
+.nx1 .crest{width:24px;height:24px}
+.nx2{font-size:.76rem;opacity:.85}
+.nx3{display:flex;align-items:center;gap:8px;font-size:.74rem;flex-wrap:wrap}
+.nx3 .tg{background:rgba(255,255,255,.18);border-radius:999px;padding:2px 8px;font-weight:700}
+.nx3 .fc{width:20px;height:20px;border-radius:50%;display:inline-grid;place-items:center;font-size:.62rem;font-weight:800;margin-right:-4px}
+.nx3 .fc.G{background:#2fbf71}.nx3 .fc.E{background:#8a93a3}.nx3 .fc.P{background:#e5484d}
 </style>
 </head>
 <body>
@@ -768,7 +821,7 @@ var S = {
   matches:[], loading:false, loaded:false, errors:[], updated:null, addMsg:"",
   fcat:"", fdiv:"", collapsed:{}, editing:"", openVenue:{}, catOrder:[], divOrder:{}, hidePast:true, homeZone:"", homeFav:false, homeSort:"time", homeMax:0, homeCat:"", homeDiv:"", homeGrp:"", homeClub:"", homeBand:"", homeTeams:false, fgrp:"", fjor:"", fclub:"", fven:"", fstate:"", fband:"", fteams:false, fwatch:false, fmaxd:0, venMax:0, fsheet:"", watch:{}, teams:{}, eqGroup:"", crestsOn:true, catColor:{}, colorEdit:"", wrapSel:null, fopen:{}, homeQ:"", dayAnim:false, vq:"", pview:"list", notif:{on:false,lead:30,watch:true,teams:true,venues:false}, home:{lat:41.4207,lng:2.1900,label:"C/ Gran de la Sagrera, 48"}
 };
-var VERSION="v27 · 5 oct";
+var VERSION="v29 · 5 oct";
 function payload(){return {crestsOn:S.crestsOn,catColor:S.catColor,watch:S.watch,teams:S.teams,notif:S.notif,ts:S.ts||0,groups:S.groups,fav:S.fav,defRange:S.defRange,favOnlyDef:S.favOnlyDef,collapsed:S.collapsed,catOrder:S.catOrder,divOrder:S.divOrder,v:2,homeCat:S.homeCat,homeDiv:S.homeDiv,wrapSel:S.wrapSel,homeGrp:S.homeGrp,homeClub:S.homeClub,homeBand:S.homeBand,homeTeams:S.homeTeams,homeZone:S.homeZone,homeFav:S.homeFav,homeSort:S.homeSort,homeMax:S.homeMax,home:S.home};}
 var SYNC="https://vjydwzokefbmwxcwbukv.supabase.co/functions/v1/sync", SK="partitsFCF.sync";
 var syncCode=""; try{syncCode=localStorage.getItem(SK)||"";}catch(e){}
@@ -1192,30 +1245,102 @@ function wrapStory(){
   var scoreStr=function(m){return m.gh+"–"+m.ga;};
   var GMp=gMap();
   var gOf=function(m){var g=GMp[m.gid]||{};return [g.cat,g.div].filter(Boolean).join(" · ");};
-  var tiles=W.order.map(function(k){var K=W.Km[k];return '<span class="sl-chip">'+esc(K.c+" · "+K.d)+'</span>';}).join("");
-  add(350,D,A(0,"sl-k","Resum de la jornada")+A(1,"sl-h big",esc(rangeLabel([dmin,dmax])))+A(2,"sl-chips",tiles)+A(3,"sl-p","Toca per avançar · mantén premut per pausar"));
+  // 1 intro: categories en gran, divisions i grups en petit
+  var catMap={}, catOrd=[];
+  W.GL.forEach(function(x){if(!catMap[x.c]){catMap[x.c]=[];catOrd.push(x.c);} var lb=x.d+(x.g.grp?" · Gr."+x.g.grp:""); if(catMap[x.c].indexOf(lb)<0) catMap[x.c].push(lb);});
+  var big=catOrd.length<=4?"":" sm";
+  var intro=catOrd.map(function(c,i){return A(2+i,"ic"+big,'<b style="--ch:'+catHue(c,c)+'">'+esc(c)+'</b><span>'+catMap[c].map(function(l){return '<i>'+esc(l)+'</i>';}).join("")+'</span>');}).join("");
+  add(350,D,A(0,"sl-k","Resum de la jornada")+A(1,"sl-p",esc(rangeLabel([dmin,dmax])))+'<div class="icw">'+intro+'</div>');
+  // 2 números
   var goals=P.reduce(function(s,m){return s+m.gh+m.ga;},0), avg=(goals/P.length).toFixed(1).replace(".",",");
   add(210,D,A(0,"sl-k","Aquesta jornada")+A(1,"sl-big",'<span data-count="'+P.length+'">0</span>')+A(2,"sl-t","partits jugats")+A(3,"sl-big sm",'<span data-count="'+goals+'">0</span>')+A(4,"sl-t","gols marcats · "+avg+" de mitjana per partit"));
-  var best=P.slice().sort(function(a,b){return (b.gh+b.ga)-(a.gh+a.ga);})[0];
-  var matchBig=function(m,i0){return A(i0,"sl-match",'<div class="sm-t">'+crest(m.home)+'<span>'+nm(m.home)+'</span></div><b class="sm-s">'+scoreStr(m)+'</b><div class="sm-t">'+crest(m.away)+'<span>'+nm(m.away)+'</span></div>');};
-  add(30,D,A(0,"sl-k","El partit amb més gols")+matchBig(best,1)+A(2,"sl-p",esc(gOf(best))+" · "+(best.gh+best.ga)+" gols"));
-  // duels directes: rivals més propers a la classificació
+  // 3 top 3 de gols
+  var top3=P.slice().sort(function(a,b){return (b.gh+b.ga)-(a.gh+a.ga)||(Math.abs(b.gh-b.ga)-Math.abs(a.gh-a.ga));}).slice(0,3);
+  var mrow=function(m){var hw=m.gh>m.ga,aw=m.gh<m.ga;return '<div class="rw cr"><span>'+crest(m.home)+'</span><span class="rh'+(hw?" w":"")+'">'+nm(m.home)+'</span><b>'+scoreStr(m)+'</b><span class="ra'+(aw?" w":"")+'">'+nm(m.away)+'</span><span>'+crest(m.away)+'</span></div>';};
+  add(30,D,A(0,"sl-k","Top 3 · partits amb més gols")+top3.map(function(m,i){return A(1+i,"t3",'<span class="rk">'+(i+1)+'</span><div class="t3b"><small>'+esc(gOf(m))+' · '+(m.gh+m.ga)+' gols</small>'+mrow(m)+'</div>');}).join(""));
+  // 4 duels directes
   var posOf={}; W.GL.forEach(function(x){var src=x.before&&x.before.length?x.before:x.after,o={};src.forEach(function(t){o[t.n]=t;});posOf[x.g.id]=o;});
-  var duels=P.map(function(m){var o=posOf[m.gid]||{},a=o[m.home],b=o[m.away]; if(!a||!b) return null;
-    return {m:m,a:a,b:b,dp:Math.abs(a.pos-b.pos),pd:Math.abs(a.pts-b.pts),top:Math.min(a.pos,b.pos)};}).filter(Boolean)
-    .sort(function(x,y){return x.dp-y.dp||x.pd-y.pd||x.top-y.top;}).slice(0,5);
+  var pairs=P.map(function(m){var o=posOf[m.gid]||{},a=o[m.home],b=o[m.away]; if(!a||!b) return null;
+    return {m:m,a:a,b:b,dp:Math.abs(a.pos-b.pos),pd:Math.abs(a.pts-b.pts),top:Math.min(a.pos,b.pos)};}).filter(Boolean);
+  var duels=pairs.slice().sort(function(x,y){return x.dp-y.dp||x.pd-y.pd||x.top-y.top;}).slice(0,5);
   if(duels.length) add(100,D,A(0,"sl-k","Duels directes")+A(1,"sl-p","Partits entre rivals molt igualats a la classificació")
-    +duels.map(function(d,i){var m=d.m,hw=m.gh>m.ga,aw=m.gh<m.ga;
-      return A(2+i,"dl",'<small>'+esc(gOf(m))+' · '+ordn(d.a.pos)+' vs '+ordn(d.b.pos)+'</small><div class="rw cr"><span>'+crest(m.home)+'</span><span class="rh'+(hw?" w":"")+'">'+nm(m.home)+'</span><b>'+scoreStr(m)+'</b><span class="ra'+(aw?" w":"")+'">'+nm(m.away)+'</span><span>'+crest(m.away)+'</span></div>');}).join(""));
+    +duels.map(function(d,i){return A(2+i,"dl",'<small>'+esc(gOf(d.m))+' · '+ordn(d.a.pos)+' vs '+ordn(d.b.pos)+'</small>'+mrow(d.m));}).join(""));
+  // 5 qui guanya: dada gegant
   var hw=P.filter(function(m){return m.gh>m.ga;}).length, dr=P.filter(function(m){return m.gh===m.ga;}).length, aw=P.length-hw-dr;
   var pc=function(n){return Math.round(100*n/P.length);};
-  add(150,D,A(0,"sl-k","Qui guanya, casa o fora?")+A(1,"sl-bar",'<i style="flex:'+hw+'"></i><i class="e" style="flex:'+dr+'"></i><i class="v" style="flex:'+aw+'"></i>')
-    +A(2,"sl-trio",'<div><b>'+pc(hw)+'%</b><span>Locals</span></div><div><b>'+pc(dr)+'%</b><span>Empats</span></div><div><b>'+pc(aw)+'%</b><span>Visitants</span></div>'));
+  var byC={}; P.forEach(function(m){var g=GMp[m.gid]||{},c=g.cat||NOCAT;var o=byC[c]||(byC[c]={c:c,n:0,h:0,g:0});o.n++;o.g+=m.gh+m.ga;if(m.gh>m.ga)o.h++;});
+  var cl=Object.keys(byC).map(function(k){return byC[k];});
+  var hc=cl.filter(function(o){return o.n>=3;}).sort(function(a,b){return b.h/b.n-a.h/a.n;});
+  var wrow=function(i,cls,lab,n){return A(i,"win "+cls,'<div class="wf" style="--w:'+pc(n)+'%"></div><b>'+pc(n)+'<small>%</small></b><span>'+lab+'<em>'+n+(n===1?" partit":" partits")+'</em></span>');};
+  add(150,D,A(0,"sl-k","Qui guanya, casa o fora?")+'<div class="wins">'+wrow(1,"h","Guanya el local",hw)+wrow(2,"e","Empat",dr)+wrow(3,"v","Guanya el visitant",aw)+'</div>'
+    +(hc.length>1?A(4,"sl-foot","Més fortins a casa: <b>"+esc(hc[0].c)+"</b> ("+Math.round(100*hc[0].h/hc[0].n)+"% locals) · Menys: <b>"+esc(hc[hc.length-1].c)+"</b> ("+Math.round(100*hc[hc.length-1].h/hc[hc.length-1].n)+"%)"):""));
+  // 6 sorpreses
+  var sur=pairs.map(function(d){var m=d.m,w=m.gh>m.ga?d.a:(m.gh<m.ga?d.b:null),l=m.gh>m.ga?d.b:d.a; if(!w) return null; var gap=w.pos-l.pos; return gap>=3?{m:m,gap:gap,w:w,l:l}:null;}).filter(Boolean).sort(function(a,b){return b.gap-a.gap;}).slice(0,3);
+  if(sur.length) add(280,D,A(0,"sl-k","Sorpreses de la jornada")+A(1,"sl-p","Han guanyat els qui anaven per darrere a la taula")
+    +sur.map(function(z,i){return A(2+i,"dl",'<small>'+esc(gOf(z.m))+' · el '+ordn(z.w.pos)+' guanya al '+ordn(z.l.pos)+'</small>'+mrow(z.m));}).join(""));
+  // moviments: pugen més de 3 posicions
+  var rise=[]; W.GL.forEach(function(x){if(!x.before) return; var pb={}; x.before.forEach(function(t){pb[t.n]=t;});
+    x.after.forEach(function(t){var b0=pb[t.n]; if(b0&&b0.pj&&b0.pos-t.pos>3) rise.push({n:t.n,d:b0.pos-t.pos,pos:t.pos,from:b0.pos,x:x});});});
+  rise.sort(function(a,b){return b.d-a.d;}); rise=rise.slice(0,5);
+  if(rise.length) add(160,D,A(0,"sl-k","Moviments a la taula")+A(1,"sl-h","Els que més pugen")+rise.map(function(z,i){return A(2+i,"rw cl",'<span class="rkn up">▲'+z.d+'</span>'+crest(z.n)+'<span class="rn">'+nm(z.n)+'<small>'+esc(z.x.c+" · "+z.x.d)+' · del '+ordn(z.from)+' al '+ordn(z.pos)+'</small></span><span></span>');}).join(""));
+  // 7 ratxes
+  var rs=[]; W.GL.forEach(function(x){x.after.forEach(function(t){var f=t.form,u=0,w=0;for(var i=f.length-1;i>=0&&f[i].r!=="P";i--)u++;for(var j=f.length-1;j>=0&&f[j].r==="G";j--)w++;
+    if(w>=3) rs.push({n:t.n,v:w,k:"victòries seguides",x:x}); else if(u>=4) rs.push({n:t.n,v:u,k:"partits sense perdre",x:x});});});
+  rs.sort(function(a,b){return b.v-a.v;}); rs=rs.slice(0,5);
+  if(rs.length) add(120,D,A(0,"sl-k","Ratxes")+A(1,"sl-h","Imparables")+rs.map(function(z,i){return A(2+i,"rw cl",'<span class="rkn">'+z.v+'</span>'+crest(z.n)+'<span class="rn">'+nm(z.n)+'<small>'+esc(z.k+" · "+z.x.c+" · "+z.x.d)+'</small></span><span></span>');}).join(""));
+  // 8 porteries a zero
+  var cs=[]; P.forEach(function(m){if(m.ga===0) cs.push(m.home); if(m.gh===0) cs.push(m.away);});
+  if(cs.length>=2) add(190,D,A(0,"sl-k","Porteries a zero")+A(1,"sl-big",'<span data-count="'+cs.length+'">0</span>')+A(2,"sl-t","equips no han encaixat cap gol")+'<div class="crw a" style="--i:3">'+cs.slice(0,18).map(function(n){return crest(n);}).join("")+'</div>');
+  // 9 gols per categoria
+  if(cl.length>1){var mx=Math.max.apply(null,cl.map(function(o){return o.g/o.n;}));
+    add(60,D,A(0,"sl-k","On es marquen més gols?")+A(1,"sl-p","Mitjana de gols per partit i categoria")
+      +cl.sort(function(a,b){return b.g/b.n-a.g/a.n;}).map(function(o,i){var v=o.g/o.n;return A(2+i,"gb",'<span class="gl">'+esc(o.c)+'</span><div class="gt"><i style="width:'+Math.round(100*v/mx)+'%;--ch:'+catHue(o.c,o.c)+'"></i></div><b>'+v.toFixed(1).replace(".",",")+'</b>');}).join(""));}
+var f1=function(v){return v.toFixed(1).replace('.',',');};
+  // clubs de la jornada
+  var CS={}; P.forEach(function(m){[[m.home,m.gh,m.ga],[m.away,m.ga,m.gh]].forEach(function(z){var c=clubOf(z[0]); if(!c) return;
+    var o=CS[c.id]||(CS[c.id]={c:c,n:0,pts:0,gf:0,gc:0}); o.n++; o.gf+=z[1]; o.gc+=z[2]; o.pts+=z[1]>z[2]?3:(z[1]===z[2]?1:0);});});
+  var CL=Object.keys(CS).map(function(k){return CS[k];});
+  var crow=function(i,rank,o,big,small){return A(i,"rw cl",'<span class="rkn">'+rank+'</span>'+crest(o.c.crestTeam)+'<span class="rn">'+nm(o.c.name)+'<small>'+small+'</small></span><b>'+big+'</b>');};
+  if(CL.length>=3){
+    var byP=CL.slice().sort(function(a,b){return b.pts/b.n-a.pts/a.n||b.n-a.n||(b.gf-b.gc)/b.n-(a.gf-a.gc)/a.n;}).slice(0,3);
+    add(95,D,A(0,"sl-k","Clubs de la jornada")+A(1,"sl-h","Més punts per partit")+byP.map(function(o,i){return crow(2+i,i+1,o,f1(o.pts/o.n)+'<small> pts/p</small>',o.pts+" punts en "+o.n+(o.n===1?" partit":" partits"));}).join(""));
+    var byA=CL.slice().sort(function(a,b){return b.gf/b.n-a.gf/a.n||b.n-a.n;}).slice(0,3), byD=CL.slice().sort(function(a,b){return a.gc/a.n-b.gc/b.n||b.n-a.n;}).slice(0,3);
+    add(200,D,A(0,"sl-k","Clubs de la jornada")+A(1,"sl-sub","Millor atac · gols a favor per partit")+byA.map(function(o,i){return crow(2+i,i+1,o,f1(o.gf/o.n),o.gf+" gols en "+o.n+(o.n===1?" partit":" partits"));}).join("")
+      +A(5,"sl-sub","Millor defensa · gols en contra per partit")+byD.map(function(o,i){return crow(6+i,i+1,o,f1(o.gc/o.n),o.gc+" gols en "+o.n+(o.n===1?" partit":" partits"));}).join(""));
+  }
+  // comparativa amb la jornada anterior
+  var prevMs=[]; W.GL.forEach(function(x){var js={}; S.matches.forEach(function(m){var j=+m.jornada||0; if(m.gid===x.g.id&&j<x.lastJ&&playedOf(m)) (js[j]=js[j]||[]).push(m);});
+    var ks=Object.keys(js).map(Number).sort(function(a,b){return a-b;}); if(ks.length) js[ks[ks.length-1]].forEach(function(m){prevMs.push(m);});});
+  if(prevMs.length>=2){
+    var agg=function(ms){var n=ms.length,g=0,d=0,h=0;ms.forEach(function(m){g+=m.gh+m.ga;if(m.gh===m.ga)d++;else if(m.gh>m.ga)h++;});return {n:n,gpm:g/n,dr:100*d/n,hw:100*h/n};};
+    var c0=agg(P), c1=agg(prevMs);
+    var cm=function(i,lab,a,b,fmt,unit){var d=a-b,cls=Math.abs(d)<0.05?"z":(d>0?"up":"dn"),ar=cls==="z"?"=":(d>0?"▲ ":"▼ ");
+      return A(i,"cmp",'<span class="cl">'+lab+'</span><b>'+fmt(a)+unit+'</b><span class="cd '+cls+'">'+ar+(cls==="z"?"":fmt(Math.abs(d))+unit)+'<em>abans '+fmt(b)+unit+'</em></span>');};
+    var r0=function(v){return String(Math.round(v));};
+    add(260,D,A(0,"sl-k","Comparada amb la jornada anterior")+cm(1,"Partits jugats",c0.n,c1.n,r0,"")+cm(2,"Gols per partit",c0.gpm,c1.gpm,f1,"")+cm(3,"Empats",c0.dr,c1.dr,r0,"%")+cm(4,"Victòries locals",c0.hw,c1.hw,r0,"%"));
+  }
+  // 10 els teus clubs, agrupats per categoria
   var mine=P.filter(function(m){return S.teams[m.home]||S.teams[m.away];});
   if(mine.length){
-    var rows=mine.slice(0,7).map(function(m,i){var isH=!!S.teams[m.home],my=isH?m.gh:m.ga,op=isH?m.ga:m.gh,r=my>op?"G":(my<op?"P":"E"),team=isH?m.home:m.away,opp=isH?m.away:m.home;
-      return A(1+i,"rw mine cl",'<span class="fc '+r+'">'+r+'</span>'+crest(team)+'<span class="rn">'+nm(team)+'<small>'+esc(gOf(m))+' · vs '+nm(opp)+'</small></span><b>'+my+"–"+op+'</b>');}).join("");
-    add(140,D,A(0,"sl-k","Els teus clubs")+rows);
+    var gr={},go=[]; mine.forEach(function(m){var l=gOf(m)||"—";if(!gr[l]){gr[l]=[];go.push(l);}gr[l].push(m);});
+    var hh="",ix=1,cnt=0;
+    go.forEach(function(l){ if(cnt>=8) return; hh+=A(ix++,"sl-sub",esc(l));
+      gr[l].forEach(function(m){ if(cnt>=8) return; cnt++; var isH=!!S.teams[m.home],my=isH?m.gh:m.ga,op=isH?m.ga:m.gh,r=my>op?"G":(my<op?"P":"E"),team=isH?m.home:m.away,opp=isH?m.away:m.home;
+        hh+=A(ix++,"rw mine cl",'<span class="fc '+r+'">'+r+'</span>'+crest(team)+'<span class="rn">'+nm(team)+'<small>vs '+nm(opp)+'</small></span><b>'+my+"–"+op+'</b>');});});
+    add(140,D,A(0,"sl-k","Els teus clubs")+hh);
+  }
+  // propers rivals dels teus clubs
+  var nx=[]; W.GL.forEach(function(x){x.after.forEach(function(t){if(!S.teams[t.n]) return; var best=null;
+    S.matches.forEach(function(m){if(m.gid!==x.g.id||playedOf(m)||isOver(m)||(m.home!==t.n&&m.away!==t.n)) return; if(!best||(m.date+(m.time||""))<(best.date+(best.time||""))) best=m;});
+    if(best){var on=best.home===t.n?best.away:best.home, ot=null; x.after.forEach(function(q){if(q.n===on) ot=q;}); if(ot) nx.push({t:t,o:ot,m:best,x:x,home:best.home===t.n});}});});
+  if(nx.length){
+    nx.sort(function(a,b){return (a.x.c+a.x.d).localeCompare(b.x.c+b.x.d)||(a.m.date+(a.m.time||"")).localeCompare(b.m.date+(b.m.time||""));});
+    var nh="",ni=1,lastL=null; nx.slice(0,5).forEach(function(z){var l=z.x.c+" · "+z.x.d; if(l!==lastL){nh+=A(ni++,"sl-sub",esc(l));lastL=l;}
+      var o=z.o,dif=o.pos-z.t.pos, tg=Math.abs(dif)<=2?"Rival directe":(dif<0?"Rival de dalt":"Rival de baix");
+      nh+=A(ni++,"nx",'<div class="nx1">'+crest(z.t.n)+'<span>'+nm(z.t.n)+'</span><i>'+(z.home?"vs":"a")+'</i>'+crest(o.n)+'<span>'+nm(o.n)+'</span></div>'
+        +'<div class="nx2">'+esc(dname(z.m.date).slice(0,3)+" "+fromIso(z.m.date).getDate()+" · "+(z.m.time||"--:--"))+' · '+(z.home?"a casa":"fora")+' · <b>'+tg+'</b></div>'
+        +'<div class="nx3"><span class="tg">'+ordn(o.pos)+' · '+o.pts+' pts</span>'+formChips(o,5)+(o.pj?'<span>'+f1(o.gf/o.pj)+' gf · '+f1(o.gc/o.pj)+' gc</span>':'')+'</div>');});
+    add(60,D,A(0,"sl-k","La propera jornada")+A(ni+1,"sl-p","Qui és el rival dels teus clubs")+nh);
   }
   // un bloc per grup: resultats (escuts) + classificació amb moviments
   var tabs=function(i,alt){return A(i,"sl-tabs",'<button data-salt="0" aria-pressed="'+!alt+'">Resultats</button><button data-salt="1" aria-pressed="'+!!alt+'">Classificació</button>');};
@@ -1248,7 +1373,7 @@ function wrapStory(){
   if(lead.length){
     var shown=lead.slice(0,8);
     add(45,D,A(0,"sl-k","Qui mana")+A(1,"sl-h","Líders")+shown.map(function(x,i){var t=x.after[0];
-      return A(2+i,"rw mine cl",'<span></span>'+crest(t.n)+'<span class="rn">'+nm(t.n)+'<small>'+esc(x.c+" · "+x.d+(x.g.grp?" · G"+x.g.grp:""))+'</small></span><b>'+t.pts+' pts</b>');}).join("")
+      return A(2+i,"rw cl",'<span></span>'+crest(t.n)+'<span class="rn">'+nm(t.n)+'<small>'+esc(x.c+" · "+x.d+(x.g.grp?" · G"+x.g.grp:""))+'</small></span><b>'+t.pts+' pts</b>');}).join("")
       +(lead.length>8?A(10,"sl-foot","I "+(lead.length-8)+" grups més (mira la classificació de cada grup)"):""));
   }
   add(350,0,A(0,"sl-k","Fi del resum")+A(1,"sl-h big","Bona setmana!")+A(2,"sl-p",P.length+" partits · "+goals+" gols")+'<div class="sl-acts a" style="--i:3"><button class="sbtn" data-scopy="1">Copia el resum</button><button class="sbtn line" data-sclose="1">Tanca</button></div>');
