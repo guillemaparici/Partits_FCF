@@ -723,6 +723,29 @@ body.nosc{overflow:hidden}
 .rg .rd{position:absolute;top:3px;left:0;right:0;text-align:center;font-size:.62rem;color:var(--mut);font-weight:600}
 .rg.hasd{padding-top:20px}
 .rg .w{color:var(--ink)}.rg .l2{opacity:.5}
+
+/* v27 */
+.cmr{position:relative;padding:9px 2px 9px 12px;gap:4px}
+.cmr::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:4px;border-radius:2px;background:hsl(var(--h) 60% 50%)}
+.c1{gap:8px}
+.c1 .ctag{font-size:.68rem;font-weight:800;border-radius:6px;padding:2px 7px;background:hsl(var(--h) 55% 92%);color:hsl(var(--h) 60% 28%);flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:auto;max-width:max-content}
+.c1 .heart{margin-left:auto}
+@media (prefers-color-scheme:dark){.c1 .ctag{background:hsl(var(--h) 35% 24%);color:hsl(var(--h) 80% 85%)}}
+.c2{gap:8px}
+.c2 .crest{width:26px;height:26px}
+.c2 .cmt{flex:1;text-align:center;line-height:1.25;font-size:.92rem}
+.c2 .cmt i{opacity:.5;font-style:normal;margin:0 2px}
+.c3{font-size:.74rem;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.evo{background:var(--sheet);border:1px solid var(--line);border-radius:16px;padding:12px 10px 10px}
+.evo svg{width:100%;height:auto;display:block}
+.evo .ax{stroke:var(--line);stroke-width:1}
+.evo text{font-family:inherit;fill:var(--mut);font-size:9px}
+.evo .pt text{fill:#fff;font-weight:800;font-size:8px;text-anchor:middle}
+.evl{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.evl button{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);color:inherit;border-radius:999px;padding:3px 10px 3px 4px;font-size:.74rem;font-weight:600}
+.evl button .crest{width:20px;height:20px;font-size:.55rem}
+.evl button[aria-pressed="true"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.evo .evn{font-size:.78rem;color:var(--mut);margin:0 0 6px}
 </style>
 </head>
 <body>
@@ -745,7 +768,7 @@ var S = {
   matches:[], loading:false, loaded:false, errors:[], updated:null, addMsg:"",
   fcat:"", fdiv:"", collapsed:{}, editing:"", openVenue:{}, catOrder:[], divOrder:{}, hidePast:true, homeZone:"", homeFav:false, homeSort:"time", homeMax:0, homeCat:"", homeDiv:"", homeGrp:"", homeClub:"", homeBand:"", homeTeams:false, fgrp:"", fjor:"", fclub:"", fven:"", fstate:"", fband:"", fteams:false, fwatch:false, fmaxd:0, venMax:0, fsheet:"", watch:{}, teams:{}, eqGroup:"", crestsOn:true, catColor:{}, colorEdit:"", wrapSel:null, fopen:{}, homeQ:"", dayAnim:false, vq:"", pview:"list", notif:{on:false,lead:30,watch:true,teams:true,venues:false}, home:{lat:41.4207,lng:2.1900,label:"C/ Gran de la Sagrera, 48"}
 };
-var VERSION="v26 · 5 oct";
+var VERSION="v27 · 5 oct";
 function payload(){return {crestsOn:S.crestsOn,catColor:S.catColor,watch:S.watch,teams:S.teams,notif:S.notif,ts:S.ts||0,groups:S.groups,fav:S.fav,defRange:S.defRange,favOnlyDef:S.favOnlyDef,collapsed:S.collapsed,catOrder:S.catOrder,divOrder:S.divOrder,v:2,homeCat:S.homeCat,homeDiv:S.homeDiv,wrapSel:S.wrapSel,homeGrp:S.homeGrp,homeClub:S.homeClub,homeBand:S.homeBand,homeTeams:S.homeTeams,homeZone:S.homeZone,homeFav:S.homeFav,homeSort:S.homeSort,homeMax:S.homeMax,home:S.home};}
 var SYNC="https://vjydwzokefbmwxcwbukv.supabase.co/functions/v1/sync", SK="partitsFCF.sync";
 var syncCode=""; try{syncCode=localStorage.getItem(SK)||"";}catch(e){}
@@ -1467,8 +1490,9 @@ function myClubsHTML(){
       +'<div>'+ms.map(function(m){
         var g=gm[m.gid]||{}, tag=[g.cat,g.div].filter(Boolean).join(" · "), hue=catHue(g.cat||NOCAT,g.cat||NOCAT), dt=distTxt(m);
         var nmH=S.teams[m.home]?'<b>'+esc(m.home)+'</b>':esc(m.home), nmA=S.teams[m.away]?'<b>'+esc(m.away)+'</b>':esc(m.away);
-        return '<div class="cmr" style="--h:'+hue+'"><div class="c1"><span class="cw">'+esc(dname(m.date).slice(0,3))+' '+fromIso(m.date).getDate()+' · '+esc(m.time||"--:--")+'</span><span class="cp2">'+esc(m.camp)+(dt?' · '+esc(dt):'')+'</span>'+heartBtn(m)+'</div>'
-          +'<div class="c2">'+(tag?'<span class="ctag">'+esc(tag)+'</span>':'')+'<span class="cmt">'+nmH+' – '+nmA+'</span></div></div>';
+        return '<div class="cmr" style="--h:'+hue+'"><div class="c1"><span class="cw">'+esc(dname(m.date).slice(0,3))+' '+fromIso(m.date).getDate()+' · '+esc(m.time||"--:--")+'</span>'+(tag?'<span class="ctag">'+esc(tag)+'</span>':'')+heartBtn(m)+'</div>'
+          +'<div class="c2">'+crest(m.home)+'<span class="cmt">'+nmH+' <i>–</i> '+nmA+'</span>'+crest(m.away)+'</div>'
+          +'<div class="c3">'+esc(m.camp)+(dt?' · '+esc(dt):'')+'</div></div>';
       }).join("")+'</div>'
       +(none.length?'<div class="cnone">Sense partit: '+none.map(esc).join(", ")+'</div>':'')+'</article>';
   }).join("")+'</div>';
@@ -1515,7 +1539,35 @@ function viewResultats(){
       return '<div class="rg'+(mi?" mine":"")+(d?" hasd":"")+'" title="'+esc(m.home+" – "+m.away)+'" aria-label="'+esc(m.home+(pl?" "+m.gh+"-"+m.ga+" ":" – ")+m.away)+'">'+(d?'<span class="rd">'+esc(d)+'</span>':'')+crest(m.home)+(pl?'<b><span class="'+(hw?"w":"l2")+'">'+m.gh+'</span> – <span class="'+(aw?"w":"l2")+'">'+m.ga+'</span></b>':'<b class="l2">vs</b>')+crest(m.away)+'</div>';
     }).join("")+'</div>';
   }
+  S.evCtx={g:gid,j:cj};
+  b+='<h2 class="h2" style="margin-top:22px">Evolució de la classificació</h2><div class="evo" id="evc">'+evoHTML(gid,cj)+'</div>';
   return shell(top,b);
+}
+function evoHTML(gid,cj){
+  var gm=S.matches.filter(function(m){return m.gid===gid;}), jl={};
+  gm.forEach(function(m){var j=+m.jornada||0;(jl[j]=jl[j]||[]).push(m);});
+  var J=Object.keys(jl).map(Number).sort(function(a,b){return a-b;}).filter(function(j){return (cj==null||j<=cj)&&jl[j].some(playedOf);});
+  if(!J.length) return '<p class="evn">Encara no hi ha jornades jugades per dibuixar l\'evolució.</p>';
+  var snaps=J.map(function(j){var o={};standings(gid,function(m){return (+m.jornada||0)>j;}).forEach(function(t){o[t.n]=t.pos;});return o;});
+  var teams=standings(gid).map(function(t){return t.n;}), n=teams.length;
+  var hl={}; if(S.evT&&teams.indexOf(S.evT)>=0) hl[S.evT]=1; else teams.forEach(function(t){if(S.teams[t]) hl[t]=1;});
+  var any=Object.keys(hl).length>0;
+  var W=360,L=26,R=20,T=14,B=22,dy=Math.min(24,Math.max(17,300/n)),H=T+(n-1)*dy+B+8,dx=J.length>1?(W-L-R)/(J.length-1):0;
+  var X=function(i){return J.length>1?L+i*dx:(W/2);}, Y=function(p){return T+(p-1)*dy;};
+  var col=function(t){return "hsl("+hueOf(t)+" 62% 46%)";};
+  var g='';
+  for(var p=1;p<=n;p++) g+='<line class="ax" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(p)+'" y2="'+Y(p)+'"/><text x="'+(L-8)+'" y="'+(Y(p)+3)+'" text-anchor="end">'+p+'</text>';
+  J.forEach(function(j,i){if(J.length>12&&i%2) return; g+='<text x="'+X(i)+'" y="'+(H-6)+'" text-anchor="middle">J'+j+'</text>';});
+  var order=teams.slice().sort(function(a,b){return (hl[a]?1:0)-(hl[b]?1:0);});
+  order.forEach(function(t){
+    var on=!!hl[t], op=any?(on?1:.22):.85, sw=on?3.4:2;
+    var pts=J.map(function(j,i){return X(i)+","+Y(snaps[i][t]||n);}).join(" ");
+    g+='<g opacity="'+op+'"><title>'+esc(t)+'</title>'+(J.length>1?'<polyline fill="none" stroke="'+col(t)+'" stroke-width="'+sw+'" stroke-linejoin="round" stroke-linecap="round" points="'+pts+'"/>':'')
+      +'<g class="pt"><circle cx="'+X(J.length-1)+'" cy="'+Y(snaps[J.length-1][t]||n)+'" r="'+(on?10:8.5)+'" fill="'+col(t)+'"/><text x="'+X(J.length-1)+'" y="'+(Y(snaps[J.length-1][t]||n)+3)+'">'+esc(initials(t))+'</text></g></g>';
+  });
+  var h='<p class="evn">Posició després de cada jornada, fins a la J'+J[J.length-1]+'. Toca un equip per ressaltar-lo.</p><svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Evolució de la classificació">'+g+'</svg>';
+  h+='<div class="evl">'+standings(gid,function(m){return (+m.jornada||0)>J[J.length-1];}).map(function(t){return '<button data-evt="'+esc(t.n)+'" aria-pressed="'+!!hl[t.n]+'">'+crest(t.n)+esc(t.n)+'</button>';}).join("")+'</div>';
+  return h;
 }
 
 
@@ -2027,7 +2079,7 @@ function render(){
 // ---------- eventos ----------
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&S.fsheet){S.fsheet="";render();}});
 document.addEventListener("click",function(e){
-  var t=e.target.closest("[data-tab],[data-range],[data-day],[data-view],[data-fav],[data-del],[data-act],[data-toggle],[data-edit],[data-vopen],[data-mv],[data-hsort],[data-classify],[data-watch],[data-team],[data-colorcat],[data-setcolor],[data-pview],[data-fopen],[data-wopen],[data-club],[data-rj],[data-salt],[data-wsel],[data-wcat],[data-wall],[data-wgo],[data-sclose],[data-scopy],[data-clr],[data-fclose],[data-fclear],[data-fk],[data-hmaxset]");
+  var t=e.target.closest("[data-tab],[data-range],[data-day],[data-view],[data-fav],[data-del],[data-act],[data-toggle],[data-edit],[data-vopen],[data-mv],[data-hsort],[data-classify],[data-watch],[data-team],[data-colorcat],[data-setcolor],[data-pview],[data-fopen],[data-wopen],[data-evt],[data-club],[data-rj],[data-salt],[data-wsel],[data-wcat],[data-wall],[data-wgo],[data-sclose],[data-scopy],[data-clr],[data-fclose],[data-fclear],[data-fk],[data-hmaxset]");
   if(!t) return;
   if(t.dataset.tab){S.tab=t.dataset.tab;S.fsheet="";render();try{window.scrollTo(0,0);}catch(x){}return;}
   if(t.dataset.range){S.range=t.dataset.range;S.day="all";S.dayAnim=true;render();return;}
@@ -2058,6 +2110,7 @@ document.addEventListener("click",function(e){
   if(t.dataset.team){toggleTeam(t.dataset.team);render();return;}
   if(t.dataset.club){toggleClub(t.dataset.club);render();return;}
   if(t.dataset.rj){var gx=S.eqGroup||(S.groups[0]||{}).id,all=S.matches.filter(function(m){return m.gid===gx;}),jj={};all.forEach(function(m){jj[+m.jornada||0]=1;});var jsx=Object.keys(jj).map(Number).sort(function(a,b){return a-b;}),cur=(S.eqJ&&S.eqJ.g===gx)?S.eqJ.j:null;if(cur==null){jsx.forEach(function(j){if(all.some(function(m){return (+m.jornada||0)===j&&playedOf(m);}))cur=j;});}var ni=jsx.indexOf(cur)+(+t.dataset.rj);if(ni>=0&&ni<jsx.length){S.eqJ={g:gx,j:jsx[ni]};render();}return;}
+  if(t.dataset.evt){S.evT=(S.evT===t.dataset.evt)?"":t.dataset.evt;var ec=$("evc");if(ec&&S.evCtx) ec.innerHTML=evoHTML(S.evCtx.g,S.evCtx.j);return;}
   if(t.dataset.salt){STORY.alt=t.dataset.salt==="1";drawStory();return;}
   if(t.dataset.hsort){S.homeSort=t.dataset.hsort;save();render();return;}
   if(t.dataset.mv){var mp=t.dataset.mv.split("¦");moveItem(mp[0],mp[1],+mp[2]);render();return;}
