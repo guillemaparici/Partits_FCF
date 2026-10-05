@@ -447,6 +447,56 @@ nav.tabs button{font-size:.66rem}
 .ppi{display:grid;grid-template-columns:auto 1fr;gap:8px}
 .ppt{font-weight:800;font-variant-numeric:tabular-nums}
 .leaflet-popup-content{margin:12px 14px}
+
+/* v22 · compacte */
+.top{padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 38px}
+.top h1{font-size:1.9rem}
+.top .subline{font-size:.84rem}
+.top-in{gap:3px;padding-right:50px}
+.rbtn{position:absolute;right:0;top:2px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center}
+.rbtn svg{width:20px;height:20px}
+.rbtn[disabled]{opacity:.7}
+.sheet{margin-top:-22px;padding:14px 14px 24px;gap:10px}
+.tb{display:flex;gap:8px;align-items:center;min-width:0}
+.tb .sbox{flex:1;min-width:0}
+.tb input[type=search]{width:100%;height:42px;border-radius:12px}
+.fbtn{flex:0 0 auto;height:42px;display:inline-flex;align-items:center;gap:7px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--sheet);color:inherit;font-weight:700;font-size:.88rem}
+.fbtn svg{width:18px;height:18px}
+.fbtn.on{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.fcnt{font-style:normal;background:var(--accent);color:#fff;border-radius:999px;min-width:18px;height:18px;font-size:.72rem;display:inline-grid;place-items:center;padding:0 5px}
+.seg.mini{flex:0 0 auto;padding:3px;gap:2px}
+.seg.mini button{padding:0 12px;height:36px;font-size:.84rem;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center}
+.seg.mini.pv button{width:40px;padding:0}
+.seg.mini svg{width:18px;height:18px}
+.tb > .seg.mini:last-child{margin-left:auto}
+.fpanel{background:var(--card);border-radius:14px;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px 10px}
+.fpanel .fs{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fpanel .fs.wide{grid-column:1/-1}
+.fpanel .fl{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;gap:6px;align-items:center}
+.fpanel .fl svg{width:14px;height:14px}
+.fpanel select,.fpanel input{width:100%;height:40px}
+.fpanel .chips{flex-wrap:wrap;overflow:visible}
+.fpanel .seg button{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.fpanel .seg svg{width:16px;height:16px}
+@media (min-width:900px){.fpanel{grid-template-columns:repeat(4,1fr)}.fpanel .fs.wide{grid-column:span 2}}
+.achips{display:flex;gap:6px;flex-wrap:wrap}
+.achip{border:0;background:var(--ink);color:var(--on-ink);border-radius:999px;padding:6px 8px 6px 12px;font-size:.78rem;font-weight:600;display:inline-flex;gap:5px;align-items:center}
+.achip svg{width:14px;height:14px;opacity:.8}
+.meta{font-size:.8rem;color:var(--muted);margin:0 2px 8px;font-weight:600}
+.days{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.days::-webkit-scrollbar{display:none}
+.day{flex:0 0 auto;flex-direction:row;align-items:center;gap:7px;padding:7px 13px;border-radius:999px}
+.day b{font-size:.95rem;font-family:var(--body,inherit)}
+.day span{font-size:.74rem;letter-spacing:.04em}
+.day[aria-pressed="true"] b{color:#fff}
+.chip{padding:8px 14px;font-size:.84rem}
+.pgrid,.filters{display:flex;flex-direction:column;gap:10px}
+@media (min-width:900px){.pgrid{display:flex;flex-direction:column;gap:12px;align-items:stretch}.filters{position:static;max-height:none;overflow:visible;padding:0}.top{padding-bottom:40px}.top h1{font-size:2.2rem}.sheet{padding:16px 24px 28px}}
+.vsearch{display:none}
+.vcount{margin:2px 2px 8px;font-size:.8rem;color:var(--muted);font-weight:600}
+.vcard{border-radius:14px}
+.vh{padding:12px 14px}
+@media (max-width:420px){.fbtn span{display:none}.fbtn{padding:0 11px}.seg.mini button{padding:0 10px;font-size:.8rem}}
 </style>
 </head>
 <body>
@@ -467,9 +517,9 @@ var S = {
   range:"this", from:"", to:"", day:"all", favOnly:false, view:"time",
   tmin:"00:00", tmax:"23:59", zone:"", q:"",
   matches:[], loading:false, loaded:false, errors:[], updated:null, addMsg:"",
-  fcat:"", fdiv:"", collapsed:{}, editing:"", openVenue:{}, catOrder:[], divOrder:{}, hidePast:true, homeZone:"", homeFav:false, homeSort:"time", homeMax:0, homeCat:"", homeDiv:"", watch:{}, teams:{}, eqGroup:"", crestsOn:true, catColor:{}, colorEdit:"", vq:"", pview:"list", notif:{on:false,lead:30,watch:true,teams:true,venues:false}, home:{lat:41.4207,lng:2.1900,label:"C/ Gran de la Sagrera, 48"}
+  fcat:"", fdiv:"", collapsed:{}, editing:"", openVenue:{}, catOrder:[], divOrder:{}, hidePast:true, homeZone:"", homeFav:false, homeSort:"time", homeMax:0, homeCat:"", homeDiv:"", watch:{}, teams:{}, eqGroup:"", crestsOn:true, catColor:{}, colorEdit:"", fopen:{}, vq:"", pview:"list", notif:{on:false,lead:30,watch:true,teams:true,venues:false}, home:{lat:41.4207,lng:2.1900,label:"C/ Gran de la Sagrera, 48"}
 };
-var VERSION="v21 · 4 oct";
+var VERSION="v22 · 5 oct";
 function payload(){return {crestsOn:S.crestsOn,catColor:S.catColor,watch:S.watch,teams:S.teams,notif:S.notif,ts:S.ts||0,groups:S.groups,fav:S.fav,defRange:S.defRange,favOnlyDef:S.favOnlyDef,collapsed:S.collapsed,catOrder:S.catOrder,divOrder:S.divOrder,v:2,homeCat:S.homeCat,homeDiv:S.homeDiv,homeZone:S.homeZone,homeFav:S.homeFav,homeSort:S.homeSort,homeMax:S.homeMax,home:S.home};}
 var SYNC="https://vjydwzokefbmwxcwbukv.supabase.co/functions/v1/sync", SK="partitsFCF.sync";
 var syncCode=""; try{syncCode=localStorage.getItem(SK)||"";}catch(e){}
@@ -696,6 +746,8 @@ function filtered(){
 // ---------- iconos ----------
 function ic(name,cls){
   var p={
+    sliders:'<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',
+    x:'<path d="M6 6l12 12M18 6L6 18"/>',
     cal:'<rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/>',
     pin:'<path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
     list:'<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/>',
@@ -730,6 +782,10 @@ function mapLink(m){
   if(m.lat==null||m.lng==null) return "";
   return '<a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+m.lat+','+m.lng+'">Mapa</a>';
 }
+function updTxt(){return S.updated?"Actualitzat a les "+p2(S.updated.getHours())+":"+p2(S.updated.getMinutes()):"";}
+function rbtn(){return '<button class="rbtn" data-act="reload" aria-label="Actualitza ara" title="'+esc(updTxt()||"Actualitza")+'"'+(S.loading?" disabled":"")+'>'+ic("refresh",S.loading?"spin":"")+'</button>';}
+function fbtn(key,n){var o=!!S.fopen[key];return '<button class="fbtn'+(o?" on":"")+'" data-fopen="'+key+'" aria-expanded="'+o+'" aria-label="Filtres'+(n?' ('+n+' actius)':'')+'">'+ic("sliders")+'<span>Filtres</span>'+(n?'<i class="fcnt">'+n+'</i>':'')+'</button>';}
+function achips(list){return list.length?'<div class="achips">'+list.map(function(x){return '<button class="achip" data-clr="'+x[1]+'" aria-label="Treu el filtre '+esc(x[0])+'">'+esc(x[0])+ic("x")+'</button>';}).join("")+'</div>':"";}
 function shell(top,body){
   return '<header class="top"><div class="top-in">'+top+'</div></header><section class="sheet">'+body+'</section>';
 }
@@ -851,12 +907,12 @@ function teamCard(n){
 }
 function viewEquips(){
   GM=gMap();
-  var top='<span class="eyebrow">Competició</span><h1>Equips</h1><span class="subline">Classificació i els equips que segueixes</span>';
+  var top='<span class="eyebrow">Competició</span><h1>Clubs</h1><span class="subline">Els clubs que segueixes i la classificació</span>';
   if(S.loading&&!S.loaded) return shell(top,'<div class="empty"><b>Carregant…</b></div>');
   if(!S.matches.length) return shell(top,'<div class="empty"><b>Encara no hi ha dades</b>Afegeix un grup a la pestanya Grups.</div>');
   var b="", fol=Object.keys(S.teams).sort();
-  b+='<h2 class="h2">Els meus equips</h2>';
-  b+=fol.length?'<div class="tgrid">'+fol.map(teamCard).join("")+'</div>':'<div class="empty"><b>Encara no segueixes cap equip</b>Toca l\'estrella al costat d\'un equip, a qualsevol targeta o a la classificació.</div>';
+  b+='<h2 class="h2">Els meus clubs</h2>';
+  b+=fol.length?'<div class="tgrid">'+fol.map(teamCard).join("")+'</div>':'<div class="empty"><b>Encara no segueixes cap club</b>Toca l\'estrella al costat d\'un club, a qualsevol targeta o a la classificació.</div>';
   var gid=S.eqGroup&&GM[S.eqGroup]?S.eqGroup:(S.groups[0]||{}).id;
   var opts=S.groups.map(function(g){return '<option value="'+esc(g.id)+'"'+(g.id===gid?" selected":"")+'>'+esc([gDisp(g),g.cat,g.div].filter(Boolean).join(" · "))+'</option>';}).join("");
   b+='<h2 class="h2">Classificació</h2><div class="hfilters"><div style="max-width:420px;flex:1 1 260px"><label class="f" for="eqg">Grup</label><select id="eqg">'+opts+'</select></div></div>';
@@ -933,12 +989,12 @@ function avisosBox(){
   if(!pushSupported()){
     h+='<p class="msg">'+(isIOS()&&!isStandalone()?"A l'iPhone/iPad els avisos només funcionen si afegeixes l'app a la pantalla d'inici (Comparteix → Afegeix a la pantalla d'inici) i l'obres des de la icona.":"Aquest navegador no admet avisos, o la pàgina no s'ha obert per https.")+'</p>';
   }else{
-    h+='<p class="msg">Rep una notificació abans que comenci un partit del teu programa (cor), d\'un equip que segueixes o d\'un pavelló preferit.</p>';
+    h+='<p class="msg">Rep una notificació abans que comenci un partit del teu programa (cor), d\'un club que segueixes o d\'un pavelló preferit.</p>';
     h+=here?'<div class="msg" style="color:#1a7f37;font-weight:700">Activats en aquest dispositiu.</div>':'';
     if(n.on){
       h+='<div><label class="f" for="lead">Avisa\'m</label><select id="lead">'+[15,30,45,60,90].map(o).join("")+'</select></div>'
         +sw("nwatch",n.watch,"Partits del meu programa","Els que has marcat amb el cor")
-        +sw("nteams",n.teams,"Els meus equips","Equips que segueixes amb l'estrella")
+        +sw("nteams",n.teams,"Els meus clubs","Clubs que segueixes amb l'estrella")
         +sw("nvenues",n.venues,"Els meus pavellons","Qualsevol partit als pavellons preferits");
     }
     h+='<div style="display:flex;gap:8px;flex-wrap:wrap">'+(here?'<button class="pill line" data-act="pushtest">Envia\'m un avís de prova</button><button class="pill line" data-act="pushoff">Desactiva els avisos</button>':'<button class="pill" data-act="pushon">Activa els avisos</button>')+'</div>';
@@ -974,26 +1030,27 @@ function viewInici(){
   var title=!first?"Cap partit pròxim":(first===today?"Avui":(days.length>1||fromIso(first).getDay()===6||fromIso(first).getDay()===0?"Cap de setmana":dlong(first)));
   var sub=!first?"No he trobat partits futurs":(first===today?dlong(today):dlong(first)+(days.length>1?" – "+dlong(days[days.length-1]):""));
   var top='<span class="eyebrow">Què puc anar a veure?</span><h1>'+esc(title)+'</h1><span class="subline">'+esc(sub)+(first?' · '+inDays.length+' partits'+(favN?' · '+favN+' als teus pavellons':''):'')+'</span>'
-    +'<div class="actions"><button class="pill ghost" data-act="reload" title="Toca per actualitzar ara"'+(S.loading?" disabled":"")+'>'+ic("refresh",S.loading?"spin":"")+(S.loading?"Actualitzant…":(S.updated?"Actualitzat a les "+p2(S.updated.getHours())+":"+p2(S.updated.getMinutes()):"Actualitza"))+'</button></div>';
+    +(S.updated?'<span class="subline">'+esc(updTxt())+'</span>':'')+rbtn();
   var b="";
   if(S.errors.length) b+='<div class="msg err">No s\'ha pogut llegir:\n'+esc(S.errors.join("\n"))+'</div>';
   b+=programHTML();
   if(S.loading&&!S.loaded) return shell(top,'<div class="empty"><b>Carregant els partits…</b>Consultant la FCF.</div>');
   if(!first) return shell(top,b+'<div class="empty"><b>Cap partit pròxim</b>Afegeix grups a la pestanya Grups o prem Actualitza.</div>');
-  var zopts='<option value="">Tots els barris</option>'+Object.keys(zs).sort().map(function(z){return '<option value="'+esc(z)+'"'+(z===S.homeZone?" selected":"")+'>'+esc(z)+'</option>';}).join("");
   var oo=function(map,cur,all){return '<option value="">'+all+'</option>'+Object.keys(map).sort().map(function(z){return '<option value="'+esc(z)+'"'+(z===cur?" selected":"")+'>'+esc(z)+'</option>';}).join("");};
-  var mopt=function(v,t){return '<option value="'+v+'"'+(S.homeMax===v?" selected":"")+'>'+t+'</option>';};
   var dchip=function(v,t){return '<button class="chip" data-hmaxset="'+v+'" aria-pressed="'+(S.homeMax===v)+'">'+t+'</button>';};
-  b+='<div class="distrow"><span class="lbl">'+ic("walk")+' Fins a</span>'+dchip(0,"Qualsevol")+dchip(1,"1 km")+dchip(2,"2 km")+dchip(3,"3 km")+dchip(5,"5 km")+'</div>';
-  var moreOn=!!(S.homeCat||S.homeDiv||S.homeFav);
-  b+='<details class="box"'+(moreOn?" open":"")+'><summary>Més filtres'+(moreOn?' · actius':'')+' '+ic("chev","chev")+'</summary><div class="hfilters"><div><label class="f" for="hcat">Categoria</label><select id="hcat">'+oo(cs,S.homeCat,"Totes")+'</select></div>'
-    +'<div><label class="f" for="hdiv">Divisió</label><select id="hdiv">'+oo(ds,S.homeDiv,"Totes")+'</select></div>'
-    +'<button class="chip" data-act="hfav" aria-pressed="'+S.homeFav+'">'+ic("star",S.homeFav?"fill":"")+' Només els meus pavellons</button></div></details>';
+  var act=[]; if(S.homeMax) act.push(["Fins a "+S.homeMax+" km","hmax"]); if(S.homeCat) act.push([S.homeCat,"hcat"]); if(S.homeDiv) act.push([S.homeDiv,"hdiv"]); if(S.homeFav) act.push(["Els meus pavellons","hfav"]);
+  b+='<div class="tb">'+fbtn("i",act.length)
+    +'<div class="seg mini" role="group" aria-label="Ordre"><button data-hsort="time" aria-pressed="'+!byDist+'">Per hora</button><button data-hsort="dist" aria-pressed="'+byDist+'">Més a prop</button></div></div>';
+  if(S.fopen.i) b+='<div class="fpanel">'
+    +'<div class="fs wide"><span class="fl">'+ic("walk")+' Distància a peu</span><div class="chips">'+dchip(0,"Qualsevol")+dchip(1,"1 km")+dchip(2,"2 km")+dchip(3,"3 km")+dchip(5,"5 km")+'</div></div>'
+    +'<div class="fs"><label class="fl" for="hcat">Categoria</label><select id="hcat">'+oo(cs,S.homeCat,"Totes")+'</select></div>'
+    +'<div class="fs"><label class="fl" for="hdiv">Divisió</label><select id="hdiv">'+oo(ds,S.homeDiv,"Totes")+'</select></div>'
+    +'<div class="fs"><span class="fl">Pavellons</span><button class="chip" data-act="hfav" aria-pressed="'+S.homeFav+'">'+ic("star",S.homeFav?"fill":"")+' Només els meus</button></div></div>';
+  else b+=achips(act);
   if(!rows.length){
-    b+='<div class="empty"><b>Cap partit amb aquests filtres</b>Prova de triar «Tots els barris» o treure el filtre de pavellons.</div>';
+    b+='<div class="empty"><b>Cap partit amb aquests filtres</b>Prova de treure algun filtre o d\'ampliar la distància.</div>';
     return shell(top,b);
   }
-  b+='<div class="seg" role="group" aria-label="Ordre"><button data-hsort="time" aria-pressed="'+!byDist+'">Per hora</button><button data-hsort="dist" aria-pressed="'+byDist+'">Pel més a prop</button></div>';
   var h=rows[0], st=startOf(h), mins=Math.round((st-now)/60000), live=mins<=0;
   var big=live?"S'està jugant":(h.date===today?(mins<60?"Comença en "+mins+" min":"Comença en "+durTxt(mins)):dlong(h.date));
   var small=live?((h.score?"Marcador "+h.score+" · ":"")+"va començar fa "+(-mins)+" min"):(h.date===today?("a les "+h.time):("a les "+h.time));
@@ -1105,6 +1162,7 @@ function renderList(){
     el.innerHTML='<div class="empty"><b>Encara no hi ha dades</b>Afegeix un grup a la pestanya Grups i prem Actualitza.</div>';return;
   }
   var rows=filtered();
+  var pm=$("pmeta"); if(pm){var cm={};rows.forEach(function(m){cm[m.camp]=1;});var nc=Object.keys(cm).length;pm.textContent=rows.length+(rows.length===1?" partit":" partits")+" · "+nc+(nc===1?" pavelló":" pavellons");}
   if(S.pview==="map"){renderMap(rows,el);return;}
   if(!rows.length){
     var msg=S.favOnly?"Cap partit als teus pavellons en aquestes dates. Prova de treure el filtre de pavellons.":"Cap partit amb aquests filtres.";
@@ -1137,20 +1195,19 @@ function viewPartits(){
   var camps={}; rows.forEach(function(m){camps[m.camp]=1;});
   var nCamps=Object.keys(camps).length;
   var favCount=Object.keys(S.fav).filter(function(k){return S.fav[k];}).length;
-  var upd=S.updated?'<span class="subline">Actualitzat a les '+p2(S.updated.getHours())+':'+p2(S.updated.getMinutes())+'</span>':'';
-  var top='<span class="eyebrow">'+esc(rangeTitle())+'</span><h1>'+esc(rangeLabel(r))+'</h1>'
-    +'<div class="actions"><button class="pill" data-act="reload"'+(S.loading?" disabled":"")+'>'+ic("refresh",S.loading?"spin":"")+(S.loading?"Actualitzant":"Actualitza")+'</button>'+upd+'</div>';
+  var top='<span class="eyebrow">'+esc(rangeTitle())+'</span><h1>'+esc(rangeLabel(r))+'</h1>'+(S.updated?'<span class="subline">'+esc(updTxt())+'</span>':'')+rbtn();
 
   var b="";
   if(S.errors.length) b+='<div class="msg err">No s\'ha pogut llegir:\n'+esc(S.errors.join("\n"))+'</div>';
-  b+='<div class="pgrid"><aside class="filters">';
-  b+='<div class="tiles"><div class="tile red"><span>Partits</span><b>'+rows.length+'</b><em>en '+nCamps+' '+(nCamps===1?"pavelló":"pavellons")+' · '+S.groups.length+' grup'+(S.groups.length===1?"":"s")+'</em></div>'
-    +'<button class="tile dark" data-act="favonly" aria-pressed="'+S.favOnly+'"><span class="star">'+ic("star","fill")+'</span><span>Els meus pavellons</span><b>'+favCount+'</b><em>'+(S.favOnly?"Filtre actiu · toca per treure'l":(favCount?"Toca per veure només aquests":"Marca\'n a la pestanya Pavellons"))+'</em></button></div>';
-
+  var nact=(S.fcat?1:0)+(S.fdiv?1:0)+((S.tmin!=="00:00"||S.tmax!=="23:59")?1:0)+(S.favOnly?1:0)+(S.hidePast?0:1)+(S.view!=="time"?1:0);
+  var act=[]; if(S.fcat) act.push([S.fcat,"fcat"]); if(S.fdiv) act.push([S.fdiv,"fdiv"]); if(S.tmin!=="00:00"||S.tmax!=="23:59") act.push([S.tmin+"–"+S.tmax,"ftime"]); if(S.favOnly) act.push(["Els meus pavellons","ffav"]); if(!S.hidePast) act.push(["Amb ja jugats","fhide"]);
+  b+='<div class="pgrid"><div class="filters">';
+  b+='<div class="tb"><div class="sbox"><input id="q" type="search" placeholder="Cerca equip, pavelló…" aria-label="Cerca" value="'+esc(S.q)+'"></div>'+fbtn("p",nact)
+    +'<div class="seg mini pv" role="group" aria-label="Vista"><button data-pview="list" aria-pressed="'+(S.pview!=="map")+'" aria-label="Llista">'+ic("list")+'</button><button data-pview="map" aria-pressed="'+(S.pview==="map")+'" aria-label="Mapa">'+ic("pin")+'</button></div></div>';
   b+='<div class="chips" role="group" aria-label="Interval">'
     +[["today","Avui"],["this","Aquest cap de setmana"],["next","El vinent"],["custom","Altres dates"]].map(function(x){
       return '<button class="chip" data-range="'+x[0]+'" aria-pressed="'+(S.range===x[0])+'">'+x[1]+'</button>';
-    }).join("")+'<button class="chip" data-act="hidepast" aria-pressed="'+S.hidePast+'">Amaga els ja jugats</button></div>';
+    }).join("")+'</div>';
   if(S.range==="custom"){
     b+='<div class="row"><div><label class="f" for="cfrom">Des del</label><input id="cfrom" type="date" value="'+esc(S.from||r[0])+'"></div><div><label class="f" for="cto">Fins al</label><input id="cto" type="date" value="'+esc(S.to||r[1])+'"></div></div>';
   }
@@ -1158,26 +1215,24 @@ function viewPartits(){
   if(n>=1&&n<=7){
     var cnt={}; S.matches.forEach(function(m){ if(m.date>=r[0]&&m.date<=r[1]&&(!S.favOnly||S.fav[m.camp])) cnt[m.date]=(cnt[m.date]||0)+1; });
     b+='<div class="days" role="group" aria-label="Dia">'
-      +'<button class="day" data-day="all" aria-pressed="'+(S.day==="all")+'"><span>Tots</span><b>'+Object.keys(cnt).reduce(function(s,k){return s+cnt[k];},0)+'</b><em>partits</em></button>';
+      +'<button class="day" data-day="all" aria-pressed="'+(S.day==="all")+'"><span>Tots</span><b>'+Object.keys(cnt).reduce(function(s,k){return s+cnt[k];},0)+'</b></button>';
     for(var i=0;i<n;i++){
       var d=addDays(a,i), k=iso(d);
-      b+='<button class="day" data-day="'+k+'" aria-pressed="'+(S.day===k)+'"><span>'+esc(DAYS[d.getDay()].slice(0,3))+'</span><b>'+d.getDate()+'</b><em>'+(cnt[k]||0)+' partits</em></button>';
+      b+='<button class="day" data-day="'+k+'" aria-pressed="'+(S.day===k)+'"><span>'+esc(DAYS[d.getDay()].slice(0,3))+' '+d.getDate()+'</span><b>'+(cnt[k]||0)+'</b></button>';
     }
     b+='</div>';
   }
-  var zs={}; S.matches.forEach(function(m){zs[m.zone]=1;});
-  var zopts='<option value="">Totes</option>'+Object.keys(zs).sort().map(function(z){return '<option value="'+esc(z)+'"'+(z===S.zone?" selected":"")+'>'+esc(z)+'</option>';}).join("");
   var cs={},ds={}; S.groups.forEach(function(g){cs[g.cat||NOCAT]=1;ds[g.div||NODIV]=1;});
-  var copts='<option value="">Totes</option>'+Object.keys(cs).sort().map(function(z){return '<option value="'+esc(z)+'"'+(z===S.fcat?" selected":"")+'>'+esc(z)+'</option>';}).join("");
-  var dopts='<option value="">Totes</option>'+Object.keys(ds).sort().map(function(z){return '<option value="'+esc(z)+'"'+(z===S.fdiv?" selected":"")+'>'+esc(z)+'</option>';}).join("");
-  var wide=false; try{wide=window.matchMedia("(min-width:900px)").matches;}catch(e){}
-  b+='<details class="box"'+((wide||S.fcat||S.fdiv||S.q||S.tmin!=="00:00"||S.tmax!=="23:59")?" open":"")+'><summary>Més filtres '+ic("chev","chev")+'</summary>'
-    +'<div class="row"><div><label class="f" for="fcat">Categoria</label><select id="fcat">'+copts+'</select></div><div><label class="f" for="fdiv">Divisió</label><select id="fdiv">'+dopts+'</select></div></div>'
-    +'<div class="row"><div><label class="f" for="tmin">Des de</label><input id="tmin" type="time" value="'+esc(S.tmin)+'"></div><div><label class="f" for="tmax">Fins a</label><input id="tmax" type="time" value="'+esc(S.tmax)+'"></div></div>'
-    +'<div class="row"><div style="grid-column:1/-1"><label class="f" for="q">Cerca</label><input id="q" type="search" placeholder="Equip, pavelló, categoria" value="'+esc(S.q)+'"></div></div></details>';
-  b+='<div class="seg" role="group" aria-label="Agrupació">'
-    +[["time","Per hora"],["venue","Per pavelló"],["cat","Per categoria"]].map(function(x){return '<button data-view="'+x[0]+'" aria-pressed="'+(S.view===x[0])+'">'+x[1]+'</button>';}).join("")+'</div>';
-  b+='</aside><div class="results"><div class="seg pv" role="group" aria-label="Vista"><button data-pview="list" aria-pressed="'+(S.pview!=="map")+'">'+ic("list")+' Llista</button><button data-pview="map" aria-pressed="'+(S.pview==="map")+'">'+ic("pin")+' Mapa</button></div><div id="list"></div></div></div>';
+  var oo=function(map,cur){return '<option value="">Totes</option>'+Object.keys(map).sort().map(function(z){return '<option value="'+esc(z)+'"'+(z===cur?" selected":"")+'>'+esc(z)+'</option>';}).join("");};
+  if(S.fopen.p) b+='<div class="fpanel">'
+    +'<div class="fs"><label class="fl" for="fcat">Categoria</label><select id="fcat">'+oo(cs,S.fcat)+'</select></div>'
+    +'<div class="fs"><label class="fl" for="fdiv">Divisió</label><select id="fdiv">'+oo(ds,S.fdiv)+'</select></div>'
+    +'<div class="fs"><label class="fl" for="tmin">Hora des de</label><input id="tmin" type="time" value="'+esc(S.tmin)+'"></div>'
+    +'<div class="fs"><label class="fl" for="tmax">Hora fins a</label><input id="tmax" type="time" value="'+esc(S.tmax)+'"></div>'
+    +'<div class="fs wide"><span class="fl">Agrupa</span><div class="seg" role="group" aria-label="Agrupació">'+[["time","Per hora"],["venue","Per pavelló"],["cat","Per categoria"]].map(function(x){return '<button data-view="'+x[0]+'" aria-pressed="'+(S.view===x[0])+'">'+x[1]+'</button>';}).join("")+'</div></div>'
+    +'<div class="fs wide"><span class="fl">Mostra</span><div class="chips"><button class="chip" data-act="favonly" aria-pressed="'+S.favOnly+'">'+ic("star",S.favOnly?"fill":"")+' Només els meus pavellons</button><button class="chip" data-act="hidepast" aria-pressed="'+S.hidePast+'">Amaga els ja jugats</button></div></div></div>';
+  else b+=achips(act);
+  b+='</div><div class="results"><div id="pmeta" class="meta"></div><div id="list"></div></div></div>';
   return shell(top,b);
 }
 
@@ -1218,11 +1273,14 @@ function viewPavellons(){
   var D=venueList(), list=D.list, r=D.r, gm=D.gm, bySort=D.bySort;
   var top='<span class="eyebrow">Els teus llocs</span><h1>Pavellons</h1><span class="subline">'+esc(rangeLabel(r))+'</span>';
   if(!S.matches.length) return shell(top,'<div class="empty"><b>Encara no hi ha pavellons</b>Carrega almenys un grup perquè hi apareguin.</div>');
-  var b='<div class="chips" role="group" aria-label="Interval">'
-    +[["today","Avui"],["this","Aquest cap de setmana"],["next","El vinent"]].map(function(x){return '<button class="chip" data-range="'+x[0]+'" aria-pressed="'+(S.range===x[0])+'">'+x[1]+'</button>';}).join("")
-    +'<button class="chip" data-act="venfav" aria-pressed="'+!!S.venFav+'">'+ic("star",S.venFav?"fill":"")+' Només preferits</button>'
-    +'<button class="chip" data-act="vensort" aria-pressed="'+(bySort==="dist")+'">'+ic("walk")+' Pel més a prop</button></div>';
-  b+='<div class="vsearch"><label class="f" for="vq">Cerca pavelló</label><input id="vq" type="search" placeholder="Nom del pavelló" autocomplete="off" value="'+esc(S.vq||"")+'"></div>';
+  var act=[]; if(S.venFav) act.push(["Només preferits","pfav"]); if(bySort==="dist") act.push(["Més a prop","psort"]);
+  var b='<div class="tb"><div class="sbox"><input id="vq" type="search" placeholder="Cerca pavelló pel nom" aria-label="Cerca pavelló" autocomplete="off" value="'+esc(S.vq||"")+'"></div>'+fbtn("v",act.length)+'</div>';
+  b+='<div class="chips" role="group" aria-label="Interval">'
+    +[["today","Avui"],["this","Aquest cap de setmana"],["next","El vinent"]].map(function(x){return '<button class="chip" data-range="'+x[0]+'" aria-pressed="'+(S.range===x[0])+'">'+x[1]+'</button>';}).join("")+'</div>';
+  if(S.fopen.v) b+='<div class="fpanel">'
+    +'<div class="fs wide"><span class="fl">Mostra</span><div class="chips"><button class="chip" data-act="venfav" aria-pressed="'+!!S.venFav+'">'+ic("star",S.venFav?"fill":"")+' Només preferits</button></div></div>'
+    +'<div class="fs wide"><span class="fl">Ordena</span><div class="seg"><button data-act="vensort" aria-pressed="'+(bySort!=="dist")+'">Per hora</button><button data-act="vensort" aria-pressed="'+(bySort==="dist")+'">'+ic("walk")+' Més a prop</button></div></div></div>';
+  else b+=achips(act);
   b+='<div id="vres">'+venueHTML(D)+'</div>';
   return shell(top,b);
 }
@@ -1361,7 +1419,7 @@ function viewAjustos(){
 
 // ---------- pintado ----------
 function renderTabs(){
-  var t=[["inici","Inici","home"],["partits","Partits","cal"],["pavellons","Pavellons","pin"],["equips","Equips","shield"],["grups","Grups","list"],["ajustos","Ajustos","gear"]];
+  var t=[["inici","Inici","home"],["partits","Partits","cal"],["pavellons","Pavellons","pin"],["equips","Clubs","shield"],["grups","Grups","list"],["ajustos","Ajustos","gear"]];
   $("tabs").innerHTML=t.map(function(x){
     return '<button data-tab="'+x[0]+'"'+(S.tab===x[0]?' aria-current="page"':'')+'>'+ic(x[2])+'<span>'+x[1]+'</span></button>';
   }).join("");
@@ -1375,7 +1433,7 @@ function render(){
 
 // ---------- eventos ----------
 document.addEventListener("click",function(e){
-  var t=e.target.closest("[data-tab],[data-range],[data-day],[data-view],[data-fav],[data-del],[data-act],[data-toggle],[data-edit],[data-vopen],[data-mv],[data-hsort],[data-classify],[data-watch],[data-team],[data-colorcat],[data-setcolor],[data-pview],[data-hmaxset]");
+  var t=e.target.closest("[data-tab],[data-range],[data-day],[data-view],[data-fav],[data-del],[data-act],[data-toggle],[data-edit],[data-vopen],[data-mv],[data-hsort],[data-classify],[data-watch],[data-team],[data-colorcat],[data-setcolor],[data-pview],[data-fopen],[data-clr],[data-hmaxset]");
   if(!t) return;
   if(t.dataset.tab){S.tab=t.dataset.tab;render();try{window.scrollTo(0,0);}catch(x){}return;}
   if(t.dataset.range){S.range=t.dataset.range;S.day="all";render();return;}
@@ -1387,6 +1445,12 @@ document.addEventListener("click",function(e){
   if(t.dataset.colorcat){S.colorEdit=(S.colorEdit===t.dataset.colorcat)?"":t.dataset.colorcat;render();return;}
   if(t.dataset.setcolor){if(S.colorEdit){if(t.dataset.setcolor==="auto") delete S.catColor[S.colorEdit]; else S.catColor[S.colorEdit]=+t.dataset.setcolor;save();}render();return;}
   if(t.dataset.pview){S.pview=t.dataset.pview;render();return;}
+  if(t.dataset.fopen){S.fopen[t.dataset.fopen]=!S.fopen[t.dataset.fopen];render();return;}
+  if(t.dataset.clr){var ck=t.dataset.clr;
+    if(ck==="hmax"){S.homeMax=0;save();} else if(ck==="hcat"){S.homeCat="";save();} else if(ck==="hdiv"){S.homeDiv="";save();} else if(ck==="hfav"){S.homeFav=false;save();}
+    else if(ck==="fcat") S.fcat=""; else if(ck==="fdiv") S.fdiv=""; else if(ck==="ftime"){S.tmin="00:00";S.tmax="23:59";} else if(ck==="ffav") S.favOnly=false; else if(ck==="fhide") S.hidePast=true;
+    else if(ck==="pfav") S.venFav=false; else if(ck==="psort") S.venSort="next";
+    render();return;}
   if(t.dataset.hmaxset!==undefined){S.homeMax=+t.dataset.hmaxset||0;save();render();return;}
   if(t.dataset.watch){toggleWatch(t.dataset.watch);render();return;}
   if(t.dataset.team){toggleTeam(t.dataset.team);render();return;}
