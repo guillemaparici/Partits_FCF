@@ -824,6 +824,26 @@ body.nosc{overflow:hidden}
 .rsel select{width:100%}
 @media (max-width:520px){.rsel{grid-template-columns:1fr 1fr}.rsel>div:first-child{grid-column:1/3}}
 .tchip b{font-weight:800}
+
+/* v32 */
+.dj{font-style:normal;font-size:.74rem;font-weight:700;color:var(--muted);white-space:nowrap}
+.when .dj{align-self:baseline}
+.cmr .c1 em.hot{font-style:normal;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;background:var(--accent);color:#fff;border-radius:999px;padding:1px 7px;white-space:nowrap}
+.cmr .c1 em.hot.live{background:#d92d20}
+.cmr.live{background:rgba(217,45,32,.06);border-radius:12px}
+.cmr.mine{background:rgba(255,213,74,.12);border-radius:12px}
+.c2{display:grid!important;grid-template-columns:auto 1fr auto 1fr auto;gap:8px;align-items:center}
+.c2 .tl,.c2 .tr2{font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.c2 .tl{text-align:right}.c2 .tr2{text-align:left}
+.c2 .me{font-weight:700}
+.c2>i{font-style:normal;opacity:.5;text-align:center}
+
+.c3{display:flex;gap:6px;align-items:center}
+.c3 .cv{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.c3 .cd{flex:0 0 auto;white-space:nowrap;font-weight:700}
+.when em.dj{text-transform:none;letter-spacing:0;font-size:.74rem;font-weight:700}
+.c2 .tl,.c2 .tr2{font-size:.85rem}
+.club .cmr,.vcard .cmr{padding-right:8px}
 </style>
 </head>
 <body>
@@ -846,7 +866,7 @@ var S = {
   matches:[], loading:false, loaded:false, errors:[], updated:null, addMsg:"",
   fcat:"", fdiv:"", collapsed:{}, editing:"", openVenue:{}, catOrder:[], divOrder:{}, hidePast:true, homeZone:"", homeFav:false, homeSort:"time", homeMax:0, homeCat:"", homeDiv:"", homeGrp:"", homeClub:"", homeBand:"", homeTeams:false, fgrp:"", fjor:"", fclub:"", fven:"", fstate:"", fband:"", fteams:false, fwatch:false, fmaxd:0, venMax:0, fsheet:"", watch:{}, teams:{}, eqGroup:"", crestsOn:true, catColor:{}, colorEdit:"", wrapSel:null, fopen:{}, homeQ:"", dayAnim:false, vq:"", pview:"list", notif:{on:false,lead:30,watch:true,teams:true,venues:false}, home:{lat:41.4207,lng:2.1900,label:"C/ Gran de la Sagrera, 48"}
 };
-var VERSION="v31 · 5 oct";
+var VERSION="v32 · 6 oct";
 function payload(){return {crestsOn:S.crestsOn,catColor:S.catColor,watch:S.watch,teams:S.teams,notif:S.notif,ts:S.ts||0,groups:S.groups,fav:S.fav,defRange:S.defRange,favOnlyDef:S.favOnlyDef,collapsed:S.collapsed,catOrder:S.catOrder,divOrder:S.divOrder,v:2,homeCat:S.homeCat,homeDiv:S.homeDiv,wrapSel:S.wrapSel,homeGrp:S.homeGrp,homeClub:S.homeClub,progClosed:S.progClosed,homeBand:S.homeBand,homeTeams:S.homeTeams,homeZone:S.homeZone,homeFav:S.homeFav,homeSort:S.homeSort,homeMax:S.homeMax,home:S.home};}
 var SYNC="https://vjydwzokefbmwxcwbukv.supabase.co/functions/v1/sync", SK="partitsFCF.sync";
 var syncCode=""; try{syncCode=localStorage.getItem(SK)||"";}catch(e){}
@@ -1651,11 +1671,7 @@ function myClubsHTML(){
     var none=mine.filter(function(e){return !withM[e.k];});
     return '<article class="club"><div class="ch">'+crest(c.crestTeam)+'<div class="cname"><b>'+esc(c.name)+'</b><small>'+mine.length+(mine.length===1?" equip":" equips")+' · '+ms.length+(ms.length===1?" partit":" partits")+'</small></div>'+clubFolBtn(c)+'</div>'
       +'<div>'+ms.map(function(m){
-        var g=gm[m.gid]||{}, tag=[g.cat,g.div].filter(Boolean).join(" · "), hue=catHue(g.cat||NOCAT,g.cat||NOCAT), dt=distTxt(m);
-        var nmH=isMine(m.home,m.gid)?'<b>'+esc(m.home)+'</b>':esc(m.home), nmA=isMine(m.away,m.gid)?'<b>'+esc(m.away)+'</b>':esc(m.away);
-        return '<div class="cmr" style="--h:'+hue+'"><div class="c1"><span class="cw">'+esc(dname(m.date).slice(0,3))+' '+fromIso(m.date).getDate()+' · '+esc(m.time||"--:--")+'</span>'+(tag?'<span class="ctag">'+esc(tag)+'</span>':'')+heartBtn(m)+'</div>'
-          +'<div class="c2">'+crest(m.home)+'<span class="cmt">'+nmH+' <i>–</i> '+nmA+'</span>'+crest(m.away)+'</div>'
-          +'<div class="c3">'+esc(m.camp)+(dt?' · '+esc(dt):'')+'</div></div>';
+        return cmrRow(m,gm,true);
       }).join("")+'</div>'
       +(none.length?'<div class="cnone">Sense partit: '+none.map(function(e){return esc((e.n.slice(c.name.length).trim()||e.n)+" "+e.label);}).join(", ")+'</div>':'')+'</article>';
   }).join("")+'</div>';
@@ -1854,11 +1870,18 @@ function viewInici(){
     b+='<div class="empty"><b>Cap partit amb aquests filtres</b>Prova de treure algun filtre, la cerca o d\'ampliar la distància.</div>';
     return fin();
   }
-  var h=rows[0], st=startOf(h), mins=Math.round((st-now)/60000), live=mins<=0;
+  var CATR=["senior","juvenil","cadet","infantil","alevi","benjami","prebenjami"];
+  var heroScore=function(m){var g=GM[m.gid]||{},ci=CATR.indexOf(fold(g.cat||"")),cs=ci<0?0.35:1-ci/6.5;
+    var d=S.home?homeDist(m):null, ds=d==null?0.4:Math.max(0,Math.min(1,1-(d-1)/9));
+    var mn=(startOf(m)-now)/60000, ts=mn<=0?1:1/(1+mn/180);
+    return 0.5*cs+0.3*ds+0.2*ts;};
+  var hi=0,hb=-1; rows.forEach(function(m,i){var sc=heroScore(m); if(sc>hb){hb=sc;hi=i;}});
+  var h=rows[hi]; rows=rows.slice(0,hi).concat(rows.slice(hi+1)); rows.unshift(h);
+  var st=startOf(h), mins=Math.round((st-now)/60000), live=mins<=0;
   var big=live?"S'està jugant":(h.date===today?(mins<60?"Comença en "+mins+" min":"Comença en "+durTxt(mins)):dlong(h.date));
   var small=live?((h.score?"Marcador "+h.score+" · ":"")+"va començar fa "+(-mins)+" min"):(h.date===today?("a les "+h.time):("a les "+h.time));
   var hz="";
-  b+='<div class="hero'+(live?" live":"")+'" style="--h:'+catHue((GM[h.gid]||{}).cat,(GM[h.gid]||{}).name||(GM[h.gid]||{}).orig||h.cat)+'"><div class="hero-t"><span class="hl">'+(live?'<i class="dot"></i>':'')+(live?"Ara":(byDist?"El més a prop de casa":"El pròxim partit"))+'</span><b>'+esc(big)+'</b><em>'+esc(small)+'</em>'+(function(){var g=GM[h.gid]||{};var t=[g.cat,g.div,g.grp?"Grup "+g.grp:""].filter(Boolean);return t.length?'<span class="mtags hero-tags">'+t.map(function(x){return '<span class="cc">'+esc(x)+'</span>';}).join("")+'</span>':'<span class="mtags hero-tags"><span class="cc">'+esc(g.name||g.orig||h.cat)+'</span><button class="cc add" data-classify="'+esc(h.gid)+'">+ Categoria i divisió</button></span>';})()+'</div>'
+  b+='<div class="hero'+(live?" live":"")+'" style="--h:'+catHue((GM[h.gid]||{}).cat,(GM[h.gid]||{}).name||(GM[h.gid]||{}).orig||h.cat)+'"><div class="hero-t"><span class="hl">'+(live?'<i class="dot"></i>':'')+(live?"El partit de la jornada · ara":"El partit de la jornada")+'</span><b>'+esc(big)+'</b><em>'+esc(small)+'</em>'+(function(){var g=GM[h.gid]||{};var t=[g.cat,g.div,g.grp?"Grup "+g.grp:""].filter(Boolean);return t.length?'<span class="mtags hero-tags">'+t.map(function(x){return '<span class="cc">'+esc(x)+'</span>';}).join("")+'</span>':'<span class="mtags hero-tags"><span class="cc">'+esc(g.name||g.orig||h.cat)+'</span><button class="cc add" data-classify="'+esc(h.gid)+'">+ Categoria i divisió</button></span>';})()+'</div>'
     +'<div class="hero-m"><div class="tm">'+crest(h.home)+'<span class="tn">'+esc(h.home)+'</span></div><div class="tm">'+crest(h.away)+'<span class="tn">'+esc(h.away)+'</span></div></div>'
     +'<div class="hero-v"><span class="name">'+ic("pin")+'<span>'+esc(h.camp)+(hz?' · '+esc(hz):'')+(distTxt(h)?' · '+esc(distTxt(h)):'')+'</span></span><span class="acts">'+mapLink(h)+heartBtn(h)+starBtn(h.camp,!!S.fav[h.camp])+'</span></div></div>';
   GM=gMap();
@@ -1934,6 +1957,39 @@ function crest(n){
   return '<span class="crest" style="--ch:'+hueOf(n)+'" aria-hidden="true"><b>'+esc(initials(n))+'</b>'
     +(f?'<img src="'+esc(CREST_BASE+f)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onload="this.parentNode.classList.add(\'ok\')" onerror="this.remove()">':'')+'</span>';
 }
+
+// ---------- format comú de fitxa ----------
+var DAB=["Dg.","Dll.","Dm.","Dmc.","Dj.","Dv.","Dss."];
+function dAbbr(d){return DAB[fromIso(d).getDay()];}
+function djTxt(m){return dAbbr(m.date)+" "+fromIso(m.date).getDate()+(m.jornada!==""&&m.jornada!=null?" · J"+m.jornada:"");}
+var GENT={cf:1,cfs:1,fs:1,fsala:1,ce:1,ue:1,ud:1,cd:1,ae:1,ar:1,club:1,esportiu:1,esportius:1,futbol:1,sala:1,futsal:1,fc:1,de:1,del:1,la:1,les:1,els:1,el:1,i:1,associacio:1,escola:1,esportiva:1,agrupacio:1};
+function shortTeam(n,max){
+  n=String(n||"").replace(/\s+/g," ").trim(); max=max||(window.innerWidth>=700?26:16);
+  var up=n===n.toUpperCase();
+  var w=n.split(" ").map(function(x){return (up&&x.length>3)?x.charAt(0)+x.slice(1).toLowerCase():x;});
+  var t=w.join(" "); if(t.length<=max) return t;
+  var suf=""; if(w.length>1&&/^([A-H]|I{1,3}|IV|\d)$/i.test(w[w.length-1])){suf=w.pop();}
+  var core=w.filter(function(x){return !GENT[fold(x)];}); if(!core.length) core=w;
+  var j=function(c){return c.join(" ")+(suf?" "+suf:"");}, ab=function(x){return x.length>4?x.slice(0,3)+".":x;};
+  var c=[core.join(" "),
+         core.length>2?core[0]+" "+core[core.length-1]:"",
+         core.length>1?core[0]+" "+ab(core[core.length-1]):"",
+         core.length>1?ab(core[0])+" "+ab(core[core.length-1]):""];
+  for(var i=0;i<c.length;i++){ if(c[i]){var r=c[i]+(suf?" "+suf:""); if(r.length<=max) return r;} }
+  var room=max-(suf?suf.length+1:0)-1;
+  return core[0].slice(0,Math.max(3,room))+"…"+(suf?" "+suf:"");
+}
+// fitxa compacta (Pavellons i Clubs): hora, dia · jornada, categoria, equips en una línia i, opcionalment, pavelló
+function cmrRow(m,gm,venue){
+  var g=gm[m.gid]||{}, now=new Date();
+  var live=m.date===iso(now)&&m.time&&startOf(m)<=now&&!isOver(m);
+  var tag=[g.cat,g.div].filter(Boolean).join(" · ")||g.name||g.orig||m.cat;
+  var hm=isMine(m.home,m.gid), am=isMine(m.away,m.gid), dt=venue?distTxt(m):"";
+  return '<div class="cmr'+(live?" live":"")+((hm||am)?" mine":"")+'" style="--h:'+catHue(g.cat,g.name||g.orig||m.cat)+'"><div class="c1"><span class="cw big">'+esc(m.time||"--:--")+'</span><span class="dj">'+esc(djTxt(m))+'</span>'+(live?'<em class="hot live">En joc</em>':'')
+    +'<span class="ctag">'+esc(tag)+(g.grp?' · G'+esc(g.grp):'')+'</span>'+heartBtn(m)+'</div>'
+    +'<div class="c2" title="'+esc(m.home+" – "+m.away)+'">'+crest(m.home)+'<span class="tl'+(hm?" me":"")+'">'+esc(shortTeam(m.home))+'</span><i>–</i><span class="tr2'+(am?" me":"")+'">'+esc(shortTeam(m.away))+'</span>'+crest(m.away)+'</div>'
+    +(venue?'<div class="c3"><span class="cv">'+esc(m.camp)+'</span>'+(dt?'<span class="cd">'+esc(dt)+'</span>':'')+'</div>':'')+'</div>';
+}
 function dayBadge(m,mode){
   var t=iso(new Date()), tm=iso(addDays(new Date(),1));
   if(m.date===t&&m.time&&startOf(m)<=new Date()&&!isOver(m)) return '<em class="hot live">En joc</em>';
@@ -1951,7 +2007,7 @@ function matchCard(m,mode){
   var zn="";
   var dt=distTxt(m); if(dt) zn='<span class="zn dist">'+ic("walk")+esc(dt)+'</span>'+zn;
   return '<article class="match'+(fav?" fav":"")+((mineM(m))?" mine":"")+(S.watch[mkey(m)]?" watch":"")+'" style="--h:'+hue+'">'
-    +'<div class="mh"><span class="when"><b>'+esc(m.time||"--:--")+'</b>'+dayBadge(m,mode)+'</span><span class="grow"></span><span class="mtags">'+tagsH+'</span></div>'
+    +'<div class="mh"><span class="when"><b>'+esc(m.time||"--:--")+'</b><em class="dj">'+esc(djTxt(m))+'</em>'+(m.date===iso(new Date())&&m.time&&startOf(m)<=new Date()&&!isOver(m)?'<em class="hot live">En joc</em>':'')+'</span><span class="grow"></span><span class="mtags">'+tagsH+'</span></div>'
     +'<div class="mteams"><div class="tm">'+crest(m.home)+'<span class="tn">'+esc(m.home)+'</span>'+folBtn(m.home,m.gid)+(m.score?'<span class="sc">'+esc(sc[0])+'</span>':'')+'</div>'
     +'<div class="tm vs">VS</div>'
     +'<div class="tm">'+crest(m.away)+'<span class="tn">'+esc(m.away)+'</span>'+folBtn(m.away,m.gid)+(m.score?'<span class="sc">'+esc(sc[1])+'</span>':'')+'</div></div>'
@@ -2039,15 +2095,7 @@ function viewPartits(){
 }
 
 // ---------- pestaña Pavellons ----------
-function venueMatchRow(m,gm,mode){
-  var g=gm[m.gid]||{}, now=new Date(), today=iso(now);
-  var live=m.date===today&&m.time&&startOf(m)<=now&&!isOver(m);
-  var badge=live?'<em class="hot live">En joc</em>':(m.date===today?'<em class="hot">Avui</em>':'<em>'+esc(dname(m.date).slice(0,3))+' '+fromIso(m.date).getDate()+'</em>');
-  var lbl=[g.cat,g.div].filter(Boolean).join(" · ")||g.name||g.orig||m.cat;
-  var mi=mineM(m);
-  return '<div class="cmr vmr'+(live?" live":"")+(mi?" mine":"")+'" style="--h:'+catHue(g.cat,g.name||g.orig||m.cat)+'"><div class="c1"><span class="cw big">'+esc(m.time||"--:--")+'</span>'+badge+'<span class="ctag">'+esc(lbl)+(g.grp?' · G'+esc(g.grp):'')+'</span>'+heartBtn(m)+'</div>'
-    +'<div class="c2">'+crest(m.home)+'<span class="cmt">'+esc(m.home)+' <i>–</i> '+esc(m.away)+'</span>'+crest(m.away)+'</div></div>';
-}
+function venueMatchRow(m,gm,mode){return cmrRow(m,gm,false);}
 function fold(x){return String(x||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
 function venueList(){
   var r=curRange(), v={}, gm=gMap(); GM=gm;
