@@ -910,6 +910,14 @@ a.gcal{display:inline-flex;align-items:center;justify-content:center;color:var(-
 #toast button{border:0;background:transparent;color:#ffd166;font-weight:800;padding:4px 6px;font-size:.88rem}
 @media (min-width:900px){#toast{bottom:28px}}
 .club .ch .cname b{white-space:normal;overflow-wrap:anywhere}
+.pcard .c2.pt{display:flex!important;flex-direction:column;gap:6px;align-items:stretch}
+.ptr{display:flex;align-items:center;gap:10px;font-weight:700;font-size:.98rem;line-height:1.2;min-width:0}
+.ptr .crest{width:30px;height:30px;flex:0 0 auto}
+.ptr>span:last-child{min-width:0;overflow-wrap:anywhere}
+.pcard .c3{display:flex;align-items:center;gap:6px;margin-top:2px}
+.pcard .c3 svg{width:14px;height:14px;flex:0 0 auto;opacity:.7}
+.pcard .cw.big{font-size:1.45rem}
+button.lk.un{border:0;cursor:pointer;font-family:inherit}
 </style>
 </head>
 <body>
@@ -1612,8 +1620,8 @@ function programHTML(){
       var pg=gMap()[e.g]||{}, ph=pg.cat?catHue(pg.cat,pg.cat):hueOf(e.l||""), pdt=(e.la!=null&&e.lo!=null)?distTxt({lat:e.la,lng:e.lo}):"";
       h+='<div class="pcard cmr" style="--h:'+ph+'"><div class="c1"><span class="cw big">'+esc(e.t||"--:--")+'</span>'+(e.l?'<span class="ctag">'+esc(e.l)+'</span>':'')+(e.score?'<span class="pscore">'+esc(e.score)+'</span>':'')
         +(gcalUrl(e)?'<a class="icon-btn gcal" target="_blank" rel="noopener" href="'+esc(gcalUrl(e))+'" aria-label="Afegeix a Google Calendar" title="Afegeix a Google Calendar">'+ic("cal")+'</a>':'')+'<button class="icon-btn heart on" data-watch="'+esc(e.k)+'" aria-label="Treu del meu programa">'+ic("heart","fill")+'</button></div>'
-        +'<div class="c2">'+crest(e.h)+'<span class="cmt">'+esc(e.h)+' <i>–</i> '+esc(e.a)+'</span>'+crest(e.a)+'</div>'
-        +'<div class="c3">'+esc(e.c)+(pdt?' · '+esc(pdt):'')+'</div></div>';
+        +'<div class="c2 pt"><div class="ptr">'+crest(e.h)+'<span>'+esc(e.h)+'</span></div><div class="ptr">'+crest(e.a)+'<span>'+esc(e.a)+'</span></div></div>'
+        +'<div class="c3">'+ic("pin")+esc(e.c)+(pdt?' · '+esc(pdt):'')+'</div></div>';
     });
   });
   h+='<div class="progact"><button class="pill line" data-ics="1">'+ic("cal")+' Afegeix tot al calendari</button></div>';
@@ -1967,7 +1975,7 @@ function viewInici(){
   if(byDist&&rest.length) html='<div class="sec"><h2>Pròxims, del més a prop al més lluny</h2></div>'+html;
   if(!rest.length) html='<div class="sec"><h2>No n\'hi ha més amb aquests filtres</h2></div>';
   b+='<div class="list">'+html+'</div>';
-  b+=hidBar(hidN)+'<div><button class="pill line" data-tab="partits">Veure tots els partits i filtres</button></div>';
+  b+=hidBar(hidN);
   return fin();
 }
 
@@ -2079,7 +2087,7 @@ function matchCard(m,mode){
   var mk=mkey(m), lk=!!S.liked[mk], hd=!!S.hid[mk];
   return '<div class="swp" data-swk="'+esc(mk)+'"><div class="swpl"><i>'+ic("star","fill")+'</i><span>M\'interessa</span></div><div class="swpr"><i>'+ic("x")+'</i><span>No m\'interessa</span></div>'
     +'<article class="match'+(fav?" fav":"")+((mineM(m))?" mine":"")+(S.watch[mk]?" watch":"")+(lk?" like":"")+(hd?" hid":"")+'" style="--h:'+hue+'">'
-    +'<div class="mh"><span class="when"><b>'+esc(m.time||"--:--")+'</b><em class="dj">'+esc(djTxt(m))+'</em>'+(m.date===iso(new Date())&&m.time&&startOf(m)<=new Date()&&!isOver(m)?'<em class="hot live">En joc</em>':'')+(hd?'<em class="lk hd">Amagat</em>':(lk?'<em class="lk">★ M\'interessa</em>':''))+'</span><span class="grow"></span><span class="mtags">'+tagsH+'</span></div>'
+    +'<div class="mh"><span class="when"><b>'+esc(m.time||"--:--")+'</b><em class="dj">'+esc(djTxt(m))+'</em>'+(m.date===iso(new Date())&&m.time&&startOf(m)<=new Date()&&!isOver(m)?'<em class="hot live">En joc</em>':'')+(hd?'<button class="lk hd un" data-unhide="'+esc(mk)+'">Recupera</button>':(lk?'<em class="lk">★ M\'interessa</em>':''))+'</span><span class="grow"></span><span class="mtags">'+tagsH+'</span></div>'
     +'<div class="mteams"><div class="tm">'+crest(m.home)+'<span class="tn">'+esc(m.home)+'</span>'+folBtn(m.home,m.gid)+(m.score?'<span class="sc">'+esc(sc[0])+'</span>':'')+'</div>'
     +'<div class="tm vs">VS</div>'
     +'<div class="tm">'+crest(m.away)+'<span class="tn">'+esc(m.away)+'</span>'+folBtn(m.away,m.gid)+(m.score?'<span class="sc">'+esc(sc[1])+'</span>':'')+'</div></div>'
@@ -2396,13 +2404,13 @@ function fcRate(d,name){
 function poisP(l,k){var p=Math.exp(-l);for(var i=1;i<=k;i++)p*=l/i;return p;}
 function forecast(m){
   var d=fcData(m.gid), a=fcRate(d,m.home), b=fcRate(d,m.away);
-  if(a.pj<2||b.pj<2) return null;
+  if(a.pj+b.pj<1) return null;
   var avg=d.avg, HA=1.05;
   var lh=Math.max(0.4,a.att*b.def/avg*HA), la=Math.max(0.4,b.att*a.def/avg/HA);
   var ph=0,pe=0,pa=0,i,j,pi,pj;
   for(i=0;i<=14;i++){pi=poisP(lh,i);for(j=0;j<=14;j++){pj=poisP(la,j);if(i>j)ph+=pi*pj;else if(i===j)pe+=pi*pj;else pa+=pi*pj;}}
   var t=ph+pe+pa, h=Math.round(100*ph/t), e=Math.round(100*pe/t), x=100-h-e;
-  return {h:h,e:e,a:x,lh:lh,la:la};
+  return {h:h,e:e,a:x,lh:lh,la:la,few:Math.min(a.pj,b.pj)<3};
 }
 function pronHTML(m){
   if(playedOf(m)||isOver(m)||m.score) return "";
@@ -2433,7 +2441,7 @@ function cmpMatchHTML(m){
   if(f){
     h+='<h3 class="cmp3">Pronòstic</h3><div class="pbig"><div class="pbar"><i class="ph" style="width:'+f.h+'%"></i><i class="pe" style="width:'+f.e+'%"></i><i class="pa" style="width:'+f.a+'%"></i></div>'
       +'<div class="pleg"><span><b>'+f.h+'%</b> '+esc(shortTeam(m.home,16))+'</span><span><b>'+f.e+'%</b> empat</span><span><b>'+f.a+'%</b> '+esc(shortTeam(m.away,16))+'</span></div></div>'
-      +'<p class="msg">Gols esperats: <b>'+f1(f.lh)+'</b> – <b>'+f1(f.la)+'</b>. Es calcula amb els gols a favor i en contra de cada equip (65% tota la temporada, 35% els últims 5 partits), ajustats a la mitjana del grup i amb un petit avantatge per al local. És una estimació, no una certesa.</p>';
+      +'<p class="msg">Gols esperats: <b>'+f1(f.lh)+'</b> – <b>'+f1(f.la)+'</b>. Es calcula amb els gols a favor i en contra de cada equip (65% tota la temporada, 35% els últims 5 partits), ajustats a la mitjana del grup i amb un petit avantatge per al local. '+(f.few?'Encara hi ha pocs partits jugats, així que el pronòstic és molt orientatiu. ':'')+'És una estimació, no una certesa.</p>';
   }else h+='<p class="msg">Encara no hi ha prou partits jugats per estimar un pronòstic.</p>';
   return h;
 }
@@ -2499,11 +2507,11 @@ function swAct(k,dir){
   var undo=function(){if(prev.l)S.liked[k]=1;else delete S.liked[k];if(prev.h)S.hid[k]=1;else delete S.hid[k];save();render();};
   var msg;
   if(dir>0){
-    if(wasH){delete S.hid[k];msg="Partit recuperat";}
+    if(wasH){delete S.hid[k];msg="Partit recuperat";if(!Object.keys(S.hid).length) S.showHid=false;}
     else if(wasL){delete S.liked[k];msg="Ja no el marques com a interessant";}
     else{S.liked[k]=1;msg="Marcat: m'interessa";}
   }else{
-    if(wasH){return;}
+    if(wasH){render();return;}
     S.hid[k]=1; delete S.liked[k]; msg="Amagat: no m'interessa";
   }
   try{var u=JSON.parse(localStorage.getItem("partitsFCF.swh")||"{}");u.used=true;localStorage.setItem("partitsFCF.swh",JSON.stringify(u));}catch(e){}
@@ -2511,7 +2519,7 @@ function swAct(k,dir){
 }
 var SWB=false, PREVTAB="";
 (function(){
-  var st=null, THR=84;
+  var st=null, THR=72;
   document.addEventListener("pointerdown",function(e){
     if(e.pointerType==="mouse"&&e.button!==0) return;
     var sw=e.target.closest&&e.target.closest(".swp"); if(!sw||e.target.closest("button,a,input,select,label")) return;
@@ -2522,7 +2530,7 @@ var SWB=false, PREVTAB="";
     var dx=e.clientX-st.x, dy=e.clientY-st.y;
     if(!st.on){
       if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){st=null;return;}
-      if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)*1.5){st.on=true;st.card.style.transition="none";st.swp.classList.add("drag");st.swp.classList.remove("hint");try{st.swp.setPointerCapture(e.pointerId);}catch(x){}}
+      if(Math.abs(dx)>9&&Math.abs(dx)>Math.abs(dy)*1.15){st.on=true;st.card.style.transition="none";st.swp.classList.add("drag");st.swp.classList.remove("hint");try{st.swp.setPointerCapture(e.pointerId);}catch(x){}}
       else return;
     }
     var a=Math.abs(dx), r=a>THR?THR+(a-THR)*0.35:a; st.dx=(dx<0?-r:r);
@@ -2546,6 +2554,7 @@ var SWB=false, PREVTAB="";
   }
   document.addEventListener("pointerup",function(e){end(e,false);});
   document.addEventListener("pointercancel",function(e){end(e,true);});
+  document.addEventListener("lostpointercapture",function(e){if(st&&st.on&&e.pointerId===st.id) end(e,true);});
   document.addEventListener("click",function(e){if(SWB){e.stopPropagation();e.preventDefault();SWB=false;}},true);
 })();
 var SWPEND=false,SWT=0;
@@ -2587,8 +2596,9 @@ function downloadIcs(){
 // ---------- eventos ----------
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&S.fsheet){S.fsheet="";render();}});
 document.addEventListener("click",function(e){
-  var t=e.target.closest("[data-showhid],[data-cmp],[data-cmpclub],[data-cmpx],[data-ics],[data-tab],[data-range],[data-day],[data-view],[data-fav],[data-del],[data-act],[data-toggle],[data-edit],[data-vopen],[data-mv],[data-hsort],[data-classify],[data-watch],[data-team],[data-colorcat],[data-setcolor],[data-pview],[data-fopen],[data-wopen],[data-progtoggle],[data-evt],[data-club],[data-rj],[data-salt],[data-wsel],[data-wcat],[data-wall],[data-wgo],[data-sclose],[data-scopy],[data-clr],[data-fclose],[data-fclear],[data-fk],[data-hmaxset]");
+  var t=e.target.closest("[data-unhide],[data-showhid],[data-cmp],[data-cmpclub],[data-cmpx],[data-ics],[data-tab],[data-range],[data-day],[data-view],[data-fav],[data-del],[data-act],[data-toggle],[data-edit],[data-vopen],[data-mv],[data-hsort],[data-classify],[data-watch],[data-team],[data-colorcat],[data-setcolor],[data-pview],[data-fopen],[data-wopen],[data-progtoggle],[data-evt],[data-club],[data-rj],[data-salt],[data-wsel],[data-wcat],[data-wall],[data-wgo],[data-sclose],[data-scopy],[data-clr],[data-fclose],[data-fclear],[data-fk],[data-hmaxset]");
   if(!t) return;
+  if(t.dataset.unhide){var uk=t.dataset.unhide;delete S.hid[uk];if(!Object.keys(S.hid).length) S.showHid=false;save();render();toast("Partit recuperat",function(){S.hid[uk]=1;save();render();});return;}
   if(t.dataset.showhid){S.showHid=!S.showHid;render();return;}
   if(t.dataset.cmp){S.cmp={k:t.dataset.cmp};S.fsheet="cmp";render();return;}
   if(t.dataset.cmpx){S.cmpA="";render();return;}
