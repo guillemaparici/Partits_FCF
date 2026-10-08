@@ -918,6 +918,8 @@ a.gcal{display:inline-flex;align-items:center;justify-content:center;color:var(-
 .pcard .c3 svg{width:14px;height:14px;flex:0 0 auto;opacity:.7}
 .pcard .cw.big{font-size:1.45rem}
 button.lk.un{border:0;cursor:pointer;font-family:inherit}
+.swp img{-webkit-user-drag:none;user-drag:none}
+.swp .match{-webkit-touch-callout:none}
 </style>
 </head>
 <body>
@@ -1557,7 +1559,7 @@ function folBtn(name,gid){
   return '<button class="fol'+(on?" on":"")+'" data-team="'+esc(name)+'" data-gid="'+esc(gid||"")+'" aria-pressed="'+on+'" aria-label="'+esc((on?"Deixa de seguir ":"Segueix ")+name)+'">'+ic("star",on?"fill":"")+'</button>';
 }
 function findByKey(k){for(var i=0;i<S.matches.length;i++){if(mkey(S.matches[i])===k)return S.matches[i];}return null;}
-function snapshot(m){var g=(GM[m.gid]||{});return {h:m.home,a:m.away,d:m.date,t:m.time,c:m.camp,la:m.lat,lo:m.lng,g:m.gid,l:[g.cat,g.div].filter(Boolean).join(" · ")||gDisp(g)};}
+function snapshot(m){var g=(GM[m.gid]||{});return {h:m.home,a:m.away,d:m.date,t:m.time,c:m.camp,la:m.lat,lo:m.lng,g:m.gid,j:m.jornada,l:[g.cat,g.div].filter(Boolean).join(" · ")||gDisp(g)};}
 function toggleWatch(k){
   if(S.watch[k]){delete S.watch[k];}
   else{var m=findByKey(k);if(m){GM=gMap();S.watch[k]=snapshot(m);}}
@@ -1581,7 +1583,7 @@ function watchEntries(){
   var now=new Date(), out=[];
   Object.keys(S.watch).forEach(function(k){
     var e=Object.assign({},S.watch[k]); var live=findByKey(k);
-    if(live){e.h=live.home;e.a=live.away;e.d=live.date;e.t=live.time;e.c=live.camp;e.la=live.lat;e.lo=live.lng;e.score=live.score;}
+    if(live){e.h=live.home;e.a=live.away;e.d=live.date;e.t=live.time;e.c=live.camp;e.la=live.lat;e.lo=live.lng;e.score=live.score;e.j=live.jornada;}
     e.k=k; e.start=wStart(e);
     if(e.start.getTime()+MATCH_MIN*60000+30*60000<now.getTime()) return; // ja ha acabat fa estona
     out.push(e);
@@ -2520,6 +2522,7 @@ function swAct(k,dir){
 var SWB=false, PREVTAB="";
 (function(){
   var st=null, THR=72;
+  document.addEventListener("dragstart",function(e){if(e.target.closest&&e.target.closest(".swp")) e.preventDefault();});
   document.addEventListener("pointerdown",function(e){
     if(e.pointerType==="mouse"&&e.button!==0) return;
     var sw=e.target.closest&&e.target.closest(".swp"); if(!sw||e.target.closest("button,a,input,select,label")) return;
@@ -2530,7 +2533,7 @@ var SWB=false, PREVTAB="";
     var dx=e.clientX-st.x, dy=e.clientY-st.y;
     if(!st.on){
       if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){st=null;return;}
-      if(Math.abs(dx)>9&&Math.abs(dx)>Math.abs(dy)*1.15){st.on=true;st.card.style.transition="none";st.swp.classList.add("drag");st.swp.classList.remove("hint");try{st.swp.setPointerCapture(e.pointerId);}catch(x){}}
+      if(Math.abs(dx)>9&&Math.abs(dx)>Math.abs(dy)*1.15){st.on=true;st.card.style.transition="none";st.swp.classList.add("drag");st.swp.classList.remove("hint");if(e.pointerType==="mouse"){try{st.swp.setPointerCapture(e.pointerId);}catch(x){}}}
       else return;
     }
     var a=Math.abs(dx), r=a>THR?THR+(a-THR)*0.35:a; st.dx=(dx<0?-r:r);
@@ -2554,7 +2557,6 @@ var SWB=false, PREVTAB="";
   }
   document.addEventListener("pointerup",function(e){end(e,false);});
   document.addEventListener("pointercancel",function(e){end(e,true);});
-  document.addEventListener("lostpointercapture",function(e){if(st&&st.on&&e.pointerId===st.id) end(e,true);});
   document.addEventListener("click",function(e){if(SWB){e.stopPropagation();e.preventDefault();SWB=false;}},true);
 })();
 var SWPEND=false,SWT=0;
@@ -2570,11 +2572,42 @@ function swHint(){
 }
 // ---------- calendari ----------
 function gcd(d){return d.getFullYear()+p2(d.getMonth()+1)+p2(d.getDate())+"T"+p2(d.getHours())+p2(d.getMinutes())+"00";}
+function calName(n){
+  var w=String(n||"").replace(/\s+/g," ").trim().split(" ");
+  var up=String(n)===String(n).toUpperCase();
+  var drop={FS:1,CF:1,CFS:1,CE:1,UE:1,CD:1,FC:1,AE:1,UD:1,FSALA:1,"F.S.":1,"C.F.":1};
+  var core=w.filter(function(x,i){return !(drop[x.toUpperCase()]);});
+  if(core.length>1&&core[core.length-1].toUpperCase()==="A") core.pop();
+  if(!core.length) core=w;
+  var small={DE:1,DEL:1,LA:1,EL:1,I:1,D:1,L:1,LES:1,ELS:1,Y:1};
+  core=core.map(function(x,i){
+    if(!up) return x;
+    if(/^(A|B|C|D|E|F|G|H|I|II|III|IV)$/.test(x)&&i>0) return x;
+    if(small[x]&&i>0) return x.toLowerCase();
+    return x.charAt(0)+x.slice(1).toLowerCase();});
+  if(core.length>1){ if(/^sant$/i.test(core[0])) core[0]="St."; else if(/^santa$/i.test(core[0])) core[0]="Sta."; }
+  return core.join(" ");
+}
+function calTitle(e){
+  var g=GM[e.g]||(gMap()[e.g])||{}, comp=[g.cat,g.div].filter(Boolean).join(" · ")||e.l||"";
+  var vs=calName(e.h)+" vs "+calName(e.a);
+  return (comp?comp+" · ":"")+vs;
+}
+function calLoc(e){
+  var l=e.c||""; return l;
+}
+function calDetails(e){
+  var g=gMap()[e.g]||{}, o=[];
+  if(g.grp) o.push("Grup "+g.grp);
+  if(e.j!=null&&e.j!=="") o.push("Jornada "+e.j);
+  if(e.la!=null&&e.lo!=null) o.push("Mapa: https://www.google.com/maps/search/?api=1&query="+e.la+","+e.lo);
+  return o.join("\n");
+}
 function gcalUrl(e){
   if(!e.t||!/^\d/.test(e.t)) return "";
   var st=e.start, en=new Date(st.getTime()+MATCH_MIN*60000);
-  return "https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent("⚽ "+e.h+" – "+e.a)+"&dates="+gcd(st)+"/"+gcd(en)
-    +"&details="+encodeURIComponent((e.l?e.l+"\n":"")+"Partit afegit des de Partits FCF")+"&location="+encodeURIComponent(e.c||"")+"&ctz=Europe/Madrid";
+  return "https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(calTitle(e))+"&dates="+gcd(st)+"/"+gcd(en)
+    +"&details="+encodeURIComponent(calDetails(e))+"&location="+encodeURIComponent(calLoc(e))+"&ctz=Europe/Madrid";
 }
 function icsEsc(x){return String(x||"").replace(/\\/g,"\\\\").replace(/;/g,"\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");}
 function downloadIcs(){
@@ -2584,7 +2617,7 @@ function downloadIcs(){
   es.forEach(function(e){
     var en=new Date(e.start.getTime()+MATCH_MIN*60000);
     L.push("BEGIN:VEVENT","UID:"+e.k.replace(/[^A-Za-z0-9]/g,"")+"@partitsfcf","DTSTAMP:"+stamp,"DTSTART:"+gcd(e.start),"DTEND:"+gcd(en),
-      "SUMMARY:"+icsEsc("⚽ "+e.h+" – "+e.a),"LOCATION:"+icsEsc(e.c),"DESCRIPTION:"+icsEsc(e.l||"Partit"),
+      "SUMMARY:"+icsEsc(calTitle(e)),"LOCATION:"+icsEsc(calLoc(e)),"DESCRIPTION:"+icsEsc(calDetails(e)),
       "BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Partit","TRIGGER:-PT90M","END:VALARM","END:VEVENT");
   });
   L.push("END:VCALENDAR");
